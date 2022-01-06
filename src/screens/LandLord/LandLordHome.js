@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Animated,
   Dimensions,
-  FlatList,
   Image,
   StyleSheet,
   Text,
@@ -11,6 +10,7 @@ import {
 } from 'react-native';
 import {height} from '../../helper/Index';
 import Styles from '../../helper/Styles';
+import {SharedElement} from 'react-navigation-shared-element';
 
 const {width} = Dimensions.get('window');
 
@@ -18,7 +18,8 @@ const item_size = width * 0.68;
 const item_height = item_size * 1.5;
 const full_size = item_size + 12 * 2;
 
-const LandLordHome = () => {
+const LandLordHome = ({navigation}) => {
+  //card
   const Card = ({index, scrollX}) => {
     const inputRange = [
       (index - 1) * full_size,
@@ -28,31 +29,48 @@ const LandLordHome = () => {
 
     const scale = scrollX.interpolate({
       inputRange,
-      outputRange: [1, 1.13, 1],
+      outputRange: [0.9, 1.13, 0.9],
       extrapolate: 'clamp',
     });
+
     const TexttranslateY = scrollX.interpolate({
       inputRange,
       outputRange: [0, 10, 0],
       extrapolate: 'clamp',
     });
+
     return (
-      <TouchableOpacity style={styles.card} activeOpacity={0.6}>
-        <Animated.Image
-          source={require('../../assets/images/image.jpg')}
+      <TouchableOpacity
+        style={styles.card}
+        activeOpacity={0.6}
+        onPress={() =>
+          navigation.navigate('LandlordHouseDetails', {
+            index,
+          })
+        }>
+        <SharedElement
+          id={`item.${index}.photo`}
+          style={StyleSheet.absoluteFillObject}>
+          <Animated.Image
+            source={require('../../assets/images/image.jpg')}
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: 20,
+              transform: [{scale}],
+              resizeMode: 'cover',
+            }}
+          />
+        </SharedElement>
+        <Animated.View
           style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: 20,
-            transform: [{scale}],
-            resizeMode: 'cover',
-          }}
-        />
-        <Animated.View style={{
-            transform:[{
-                translateY: TexttranslateY
-            }]
-        }}>
+            transform: [
+              {
+                translateY: TexttranslateY,
+              },
+            ],
+            bottom: -370,
+          }}>
           <Text
             style={{
               ...Styles.text('#333', 2, true),

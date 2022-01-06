@@ -22,10 +22,7 @@ const HouseDetails = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <SharedElement
-          id={`item.${item}.photo`}
-          // style={[StyleSheet.absoluteFillObject]}
-        >
+        <SharedElement id={`item.${item}.photo`}>
           <Image
             source={require('../../assets/images/image.jpg')}
             resizeMode="cover"
@@ -47,7 +44,7 @@ const HouseDetails = ({navigation, route}) => {
             padding: 8,
             backgroundColor: '#fff',
             borderRadius: 100,
-            opacity: 0.7
+            opacity: 0.7,
           }}
           onPress={() => navigation.navigate('Direction')}
         />

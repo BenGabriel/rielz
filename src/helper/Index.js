@@ -17,7 +17,7 @@ export const Colors = {
 
 export const snackHandler = text => {
   return Snackbar.show({
-    backgroundColor: Color.primary,
+    backgroundColor: Colors.primary,
     text,
     duration: Snackbar.LENGTH_SHORT,
   });

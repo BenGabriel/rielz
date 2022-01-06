@@ -6,6 +6,7 @@ import Add from '../screens/LandLord/Add';
 import Profile from '../screens/LandLord/Profile';
 import {Ionicons, AntDesign} from '../helper/Icons';
 import {Colors} from '../helper/Index';
+// import LandlordHouseDetails from '../screens/LandLord/LandlordHouseDetails';
 
 const Tab = createMaterialTopTabNavigator();
 

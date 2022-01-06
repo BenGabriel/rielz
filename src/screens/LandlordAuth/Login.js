@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
-
 import {Ionicons} from '../../helper/Icons';
 import Button from '../../helper/Button';
 

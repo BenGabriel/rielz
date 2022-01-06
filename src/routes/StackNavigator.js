@@ -5,8 +5,9 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import FullImages from '../screens/home/FullImages';
 import LandlordDetails from '../screens/home/LandlordDetails';
 import LandLordTopNavigation from './LandLordTopNavigation';
-import Register from '../screens/LandlordAuth/Register'
-import Login from '../screens/LandlordAuth/Login'
+import Register from '../screens/LandlordAuth/Register';
+import Login from '../screens/LandlordAuth/Login';
+import LandlordHouseDetails from '../screens/LandLord/LandlordHouseDetails';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -20,6 +21,10 @@ const StackNavigator = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="LandLord" component={LandLordTopNavigation} />
+      <Stack.Screen
+        name="LandlordHouseDetails"
+        component={LandlordHouseDetails}
+      />
     </Stack.Navigator>
   );
 };
