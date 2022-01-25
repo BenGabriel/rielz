@@ -18,19 +18,6 @@ const LandlordDetails = ({navigation}) => {
     const {item} = props;
     return (
       <View style={styles.houseCard}>
-        <Text
-          style={{
-            ...Styles.text('white', 1.6, false),
-            position: 'absolute',
-            zIndex: 20,
-            right: 0,
-            padding: 6,
-            paddingHorizontal: 10,
-            backgroundColor: item % 2 === 0 ? 'red' : 'green',
-            borderBottomLeftRadius: 10,
-          }}>
-          For rent {item}
-        </Text>
         <TouchableOpacity
           style={styles.imageContainer}
           onPress={() =>

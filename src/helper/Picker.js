@@ -14,8 +14,6 @@ import {Colors, height, width} from './Index';
 const Picker = props => {
   const {placeholder, value, item, setValue, style} = props;
 
-  console.log(item);
-
   const [visible, setVisible] = useState(false);
   return (
     <>

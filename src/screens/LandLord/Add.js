@@ -1,12 +1,29 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
-import {Ionicons, FontAwesome5} from '../../helper/Icons';
-import {Colors, height, width} from '../../helper/Index';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Ionicons} from '../../helper/Icons';
+import {height, width} from '../../helper/Index';
+import Location from '../../helper/Location';
 import Picker from '../../helper/Picker';
 import Styles from '../../helper/Styles';
+import ImagePicker from 'react-native-image-crop-picker';
+import { NigeriaState } from '../../helper/NigeriaState';
 
 const Add = ({navigation}) => {
   const [houseType, setHouseType] = useState('');
+  const [state, setState] = useState('');
+  const [display, setDisplay] = useState(false);
+  const [address, setAddress] = useState('');
+  const [lat, setLat] = useState();
+  const [lng, setLng] = useState();
+  const [images, setImages] = useState([]);
 
   const types = [
     {
@@ -23,8 +40,23 @@ const Add = ({navigation}) => {
     },
   ];
 
+  const getImageFromGallery = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+    }).then(images => {
+      console.log(images);
+      const newImages = images.slice(0, 6);
+      setImages(newImages);
+    });
+  };
+
+  const filterImage = value => {
+    const newImage = images.filter(e => e.size !== value.size);
+    setImages(newImage);
+  };
+
   return (
-    <View style={{flex: 1, padding: height(2)}}>
+    <View style={{flex: 1, backgroundColor: '#59534d'}}>
       <View style={styles.navContainer}>
         <Ionicons
           name="chevron-back-sharp"
@@ -34,7 +66,7 @@ const Add = ({navigation}) => {
         />
         <Text
           style={{
-            ...Styles.text('#000', 2, true),
+            ...Styles.text('#fff', 2, true),
             marginLeft: height(11),
             textAlign: 'center',
           }}>
@@ -42,7 +74,7 @@ const Add = ({navigation}) => {
         </Text>
       </View>
       <ScrollView
-        style={{flex: 1, marginTop: height(3)}}
+        style={styles.secContainer}
         showsVerticalScrollIndicator={false}>
         <Picker
           placeholder="Select house type"
@@ -50,16 +82,27 @@ const Add = ({navigation}) => {
           value={houseType}
           setValue={setHouseType}
         />
-        <View style={styles.inputContainer}>
+        <View style={{...styles.inputContainer, marginBottom: height(3)}}>
           <Text
             style={{
               ...Styles.text('#333', 1.8, true),
               marginBottom: height(1),
             }}>
-            Location
+            Address
           </Text>
-          <TextInput value="" style={styles.input} />
+          <TextInput
+            value={address}
+            style={styles.input}
+            onFocus={() => setDisplay(true)}
+            onChangeText={() => setDisplay(true)}
+          />
         </View>
+        <Picker
+          placeholder="State"
+          item={NigeriaState}
+          value={state}
+          setValue={setState}
+        />
         <View style={styles.inputContainer}>
           <Text
             style={{
@@ -104,7 +147,7 @@ const Add = ({navigation}) => {
                 ...Styles.text('#333', 1.8, true),
                 marginBottom: height(1),
               }}>
-              Bathroom
+              No. of Bathrooms
             </Text>
             <TextInput value="" style={styles.input} keyboardType="numeric" />
           </View>
@@ -119,7 +162,60 @@ const Add = ({navigation}) => {
           </Text>
           <TextInput value="" style={styles.input} keyboardType="numeric" />
         </View>
+        <View style={styles.inputContainer}>
+          <Text
+            style={{
+              ...Styles.text('#333', 1.8, true),
+              marginBottom: height(1),
+            }}>
+            Gallery
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            {images.length === 0 ? (
+              <TouchableOpacity
+                style={styles.addimage}
+                onPress={() => getImageFromGallery()}>
+                <Text style={Styles.text('#c4c4c4', 5, false)}>+</Text>
+              </TouchableOpacity>
+            ) : (
+              images.map(imageDet => (
+                <TouchableOpacity
+                  key={imageDet.size}
+                  activeOpacity={0.8}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: width(22),
+                    height: height(11),
+                    backgroundColor: '#F7F7F7',
+                    marginTop: height(2),
+                    marginRight: 10,
+                  }}
+                  onPress={() => filterImage(imageDet)}>
+                  <Image
+                    source={{uri: imageDet.path}}
+                    style={{
+                      width: width(22),
+                      height: height(11),
+                      borderRadius: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+              ))
+            )}
+          </View>
+        </View>
       </ScrollView>
+      <Location
+        setDisplay={setDisplay}
+        display={display}
+        setValue={setAddress}
+        setLat={setLat}
+        setLng={setLng}
+      />
     </View>
   );
 };
@@ -131,7 +227,7 @@ const styles = StyleSheet.create({
     width: '95%',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: height(1),
+    padding: height(2),
   },
   icon: {
     padding: height(1.5),
@@ -149,5 +245,24 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: height(2),
+  },
+  secContainer: {
+    flex: 1,
+    marginTop: height(3),
+    backgroundColor: '#fff',
+    padding: height(2),
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    paddingTop: height(3),
+    paddingBottom: height(10)
+  },
+  addimage: {
+    width: '20%',
+    borderWidth: 1,
+    borderColor: '#c4c4c4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: height(10),
+    borderRadius: 10,
   },
 });

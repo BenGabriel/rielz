@@ -46,7 +46,7 @@ const HouseDetails = ({navigation, route}) => {
             borderRadius: 100,
             opacity: 0.7,
           }}
-          onPress={() => navigation.navigate('Direction')}
+          onPress={() => navigation.goBack()}
         />
         <Ionicons
           name="location-sharp"

@@ -69,7 +69,7 @@ const LandLordHome = ({navigation}) => {
                 translateY: TexttranslateY,
               },
             ],
-            bottom: -370,
+            bottom: height(-50),
           }}>
           <Text
             style={{
