@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -8,23 +7,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Colors, height, width} from '../../helper/Index';
-import Location from '../../helper/Location';
-import Picker from '../../helper/Picker';
+import React, {useState} from 'react';
+import EditScreensContainer from '../../helper/EditScreensContainer';
 import Styles from '../../helper/Styles';
-// import ImagePicker from 'react-native-image-crop-picker';
-import {NigeriaState} from '../../helper/NigeriaState';
+import {Colors, height, width} from '../../helper/Index';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Button from '../../helper/Button';
-import EditScreensContainer from '../../helper/EditScreensContainer';
 
-const Add = ({navigation}) => {
-  const [houseType, setHouseType] = useState('');
-  const [state, setState] = useState('');
-  const [display, setDisplay] = useState(false);
-  const [address, setAddress] = useState('');
-  const [lat, setLat] = useState();
-  const [lng, setLng] = useState();
+const EditHouse = ({navigation}) => {
   const [images, setImages] = useState([]);
   const [houseDetails, setHouseDetails] = useState({
     description: '',
@@ -34,31 +24,6 @@ const Add = ({navigation}) => {
   });
 
   const {description, rooms, bathroom, price} = houseDetails;
-
-  const types = [
-    {
-      id: 1,
-      value: 'Duplex',
-    },
-    {
-      id: 2,
-      value: 'Flat',
-    },
-    {
-      id: 3,
-      value: 'Bungalow',
-    },
-  ];
-
-  // const getImageFromGallery = () => {
-  //   ImagePicker.openPicker({
-  //     multiple: true,
-  //   }).then(images => {
-  //     console.log(images);
-  //     const newImages = images.slice(0, 6);
-  //     setImages(newImages);
-  //   });
-  // };
 
   const getImageFromGallery = type => {
     const options = {
@@ -80,34 +45,7 @@ const Add = ({navigation}) => {
   };
 
   return (
-    <EditScreensContainer navigation={navigation} title="Add House">
-      <Picker
-        placeholder="Select house type"
-        item={types}
-        value={houseType}
-        setValue={setHouseType}
-      />
-      <View style={{...styles.inputContainer, marginBottom: height(3)}}>
-        <Text
-          style={{
-            ...Styles.text('#333', 1.8, true),
-            marginBottom: height(1),
-          }}>
-          Address
-        </Text>
-        <TextInput
-          value={address}
-          style={styles.input}
-          onFocus={() => setDisplay(true)}
-          onChangeText={() => setDisplay(true)}
-        />
-      </View>
-      <Picker
-        placeholder="State"
-        item={NigeriaState}
-        value={state}
-        setValue={setState}
-      />
+    <EditScreensContainer title="Edit House" navigation={navigation}>
       <View style={styles.inputContainer}>
         <Text
           style={{
@@ -231,33 +169,32 @@ const Add = ({navigation}) => {
           marginTop: height(4),
           backgroundColor: Colors.brown,
         }}>
-        Add House
+        Edit House
       </Button>
-      <Location
-        setDisplay={setDisplay}
-        display={display}
-        setValue={setAddress}
-        setLat={setLat}
-        setLng={setLng}
-      />
     </EditScreensContainer>
   );
 };
 
-export default Add;
+export default EditHouse;
 
 const styles = StyleSheet.create({
-  navContainer: {
-    width: '95%',
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: height(2),
+  description: {
+    ...Styles.text('#333', 1.6, false),
+    borderWidth: 0.5,
+    borderColor: '#333',
+    borderRadius: 10,
+    height: 70,
+    textAlignVertical: 'top',
+    paddingHorizontal: 10,
   },
-  icon: {
-    padding: height(1.5),
-    borderRadius: 100,
-    backgroundColor: '#FFF',
-    elevation: 1,
+  addimage: {
+    width: width(20),
+    borderWidth: 1,
+    borderColor: '#c4c4c4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: height(10),
+    borderRadius: 10,
   },
   input: {
     ...Styles.text('#333', 1.6, false),
@@ -269,33 +206,5 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: height(2),
-  },
-  secContainer: {
-    flex: 1,
-    marginTop: height(3),
-    backgroundColor: '#fff',
-    padding: height(2),
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    paddingTop: height(3),
-    paddingBottom: height(10),
-  },
-  addimage: {
-    width: width(20),
-    borderWidth: 1,
-    borderColor: '#c4c4c4',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: height(10),
-    borderRadius: 10,
-  },
-  description: {
-    ...Styles.text('#333', 1.6, false),
-    borderWidth: 0.5,
-    borderColor: '#333',
-    borderRadius: 10,
-    height: 70,
-    textAlignVertical: 'top',
-    paddingHorizontal: 10,
   },
 });

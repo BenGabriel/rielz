@@ -13,6 +13,7 @@ export const Colors = {
   black: '#333',
   grey: '#A0A7BA',
   secondary: '#38b5ff',
+  brown:'#59534d'
 };
 
 export const snackHandler = text => {

@@ -32,7 +32,7 @@ const LandlordHouseDetails = ({navigation, route}) => {
           size={width(5)}
           onPress={() => navigation.goBack()}
         />
-        <Text style={Styles.text('blue', 1.8, true)}>Edit</Text>
+        <Text style={Styles.text('blue', 1.8, true)} onPress={() => navigation.navigate('EditHouse')}>Edit</Text>
       </View>
       <ScrollView
         style={{flex: 1, padding: 10, paddingRight: height(0)}}
@@ -53,21 +53,21 @@ const LandlordHouseDetails = ({navigation, route}) => {
             <Ionicons
               name="bed-outline"
               size={26}
-              color="#59534d"
+              color={Colors.brown}
               style={styles.secIcons}
             />
             <Text style={Styles.text('#333', 1.6, true)}>2 bedroom</Text>
             <FontAwesome5
               name="bath"
               size={26}
-              color="#59534d"
+              color={Colors.brown}
               style={styles.secIcons}
             />
             <Text style={Styles.text('#333', 1.6, true)}>1 bedroom</Text>
             <Ionicons
               name="location-sharp"
               size={26}
-              color="#59534d"
+              color={Colors.brown}
               style={styles.secIcons}
             />
             <Text style={Styles.text('#333', 1.6, true)}>Location</Text>

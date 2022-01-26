@@ -99,8 +99,8 @@ const LandLordHome = ({navigation}) => {
       <Image
         source={require('../../assets/images/logo.png')}
         style={{
-          height: 60,
-          width: 60,
+          height: 25,
+          width: 25,
         }}
       />
       <Text
