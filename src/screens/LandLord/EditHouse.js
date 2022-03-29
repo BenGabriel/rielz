@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import EditScreensContainer from '../../helper/EditScreensContainer';
+import EditScreensContainer from '../../components/EditScreensContainer';
 import Styles from '../../helper/Styles';
 import {Colors, height, width} from '../../helper/Index';
 import {launchImageLibrary} from 'react-native-image-picker';
-import Button from '../../helper/Button';
+import Button from '../../components/Button';
 
 const EditHouse = ({navigation}) => {
   const [images, setImages] = useState([]);

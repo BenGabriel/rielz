@@ -4,7 +4,7 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import LandLordHome from '../screens/LandLord/LandLordHome';
 import Add from '../screens/LandLord/Add';
 import Profile from '../screens/LandLord/Profile';
-import {Ionicons, AntDesign} from '../helper/Icons';
+import {Ionicons, AntDesign} from '../common/Icons';
 import {Colors} from '../helper/Index';
 import EditProfile from '../screens/LandLord/EditProfile';
 // import LandlordHouseDetails from '../screens/LandLord/LandlordHouseDetails';

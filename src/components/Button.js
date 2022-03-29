@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {BarIndicator} from 'react-native-indicators';
-import { Colors, width } from './Index';
-import Styles from './Styles';
+import { Colors, width } from '../helper/Index';
+import Styles from '../helper/Styles';
 
 const Button = props => {
   return (

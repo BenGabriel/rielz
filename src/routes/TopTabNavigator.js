@@ -3,7 +3,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import Home from '../screens/home/Home';
 import Map from '../screens/maps/Map';
 import Search from '../screens/search/Search';
-import {Ionicons, AntDesign} from '../helper/Icons';
+import {Ionicons, AntDesign} from '../common/Icons';
 import {Colors} from '../helper/Index';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 

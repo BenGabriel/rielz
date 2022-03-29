@@ -1,22 +1,15 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import {Ionicons} from '../../helper/Icons';
-import {Colors, height} from '../../helper/Index';
+import {StyleSheet, View, TextInput, FlatList} from 'react-native';
+import {Ionicons} from '../../common/Icons';
+import {height} from '../../helper/Index';
 import Styles from '../../helper/Styles';
-import {SharedElement} from 'react-navigation-shared-element';
-import HouseCard from '../../helper/HouseCard';
+import HouseCard from '../../components/HouseCard';
 
-const Search = ({navigation}) => {
+const Search = () => {
   const [search, setSearch] = useState('');
   const [searchLoad, setSearchLoad] = useState(false);
+
+  const data = [...Array(12 - 1 + 1).keys()];
 
   const searchHouse = () => {
     console.log(search);
@@ -34,12 +27,16 @@ const Search = ({navigation}) => {
         />
         <Ionicons name="search" size={15} />
       </View>
-      <FlatList
-        data={Array(10)}
-        renderItem={({index}) => <HouseCard item={index} navigation={navigation}/>}
-        keyExtractor={() => Math.random(7)}
-        showsVerticalScrollIndicator={false}
-      />
+      <View>
+        <FlatList
+          data={data}
+          renderItem={({item}) => <HouseCard item={item} />}
+          keyExtractor={item => `${item}`}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          ListFooterComponent={() => <View style={{padding: 40}} />}
+        />
+      </View>
     </View>
   );
 };

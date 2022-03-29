@@ -9,14 +9,14 @@ import {
   View,
 } from 'react-native';
 import {Colors, height, width} from '../../helper/Index';
-import Location from '../../helper/Location';
-import Picker from '../../helper/Picker';
+import Location from '../../components/Location';
+import Picker from '../../components/Picker';
 import Styles from '../../helper/Styles';
 // import ImagePicker from 'react-native-image-crop-picker';
-import {NigeriaState} from '../../helper/NigeriaState';
+import {NigeriaState} from '../../common/NigeriaState';
 import {launchImageLibrary} from 'react-native-image-picker';
-import Button from '../../helper/Button';
-import EditScreensContainer from '../../helper/EditScreensContainer';
+import Button from '../../components/Button';
+import EditScreensContainer from '../../components/EditScreensContainer';
 
 const Add = ({navigation}) => {
   const [houseType, setHouseType] = useState('');
@@ -31,9 +31,10 @@ const Add = ({navigation}) => {
     rooms: '',
     bathroom: '',
     price: '',
+    space
   });
 
-  const {description, rooms, bathroom, price} = houseDetails;
+  const {description, rooms, bathroom, price, space} = houseDetails;
 
   const types = [
     {
@@ -131,7 +132,7 @@ const Add = ({navigation}) => {
           width: '100%',
           justifyContent: 'space-between',
         }}>
-        <View style={{...styles.inputContainer, width: '45%'}}>
+        <View style={{...styles.inputContainer, width: '30%'}}>
           <Text
             style={{
               ...Styles.text('#333', 1.8, true),
@@ -148,7 +149,7 @@ const Add = ({navigation}) => {
             }
           />
         </View>
-        <View style={{...styles.inputContainer, width: '45%'}}>
+        <View style={{...styles.inputContainer, width: '30%'}}>
           <Text
             style={{
               ...Styles.text('#333', 1.8, true),
@@ -165,7 +166,25 @@ const Add = ({navigation}) => {
             }
           />
         </View>
+        <View style={{...styles.inputContainer, width: '30%'}}>
+          <Text
+            style={{
+              ...Styles.text('#333', 1.8, true),
+              marginBottom: height(1),
+            }}>
+            Available Space
+          </Text>
+          <TextInput
+            value={space}
+            style={styles.input}
+            keyboardType="numeric"
+            onChangeText={text =>
+              setHouseDetails({...houseDetails, space: text})
+            }
+          />
+        </View>
       </View>
+
       <View style={styles.inputContainer}>
         <Text
           style={{

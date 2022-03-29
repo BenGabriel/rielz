@@ -9,6 +9,7 @@ import Register from '../screens/LandlordAuth/Register';
 import Login from '../screens/LandlordAuth/Login';
 import LandlordHouseDetails from '../screens/LandLord/LandlordHouseDetails';
 import EditHouse from '../screens/LandLord/EditHouse';
+import AddTenant from '../screens/LandLord/AddTenant';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -26,10 +27,8 @@ const StackNavigator = () => {
         name="LandlordHouseDetails"
         component={LandlordHouseDetails}
       />
-      <Stack.Screen
-        name="EditHouse"
-        component={EditHouse}
-      />
+      <Stack.Screen name="EditHouse" component={EditHouse} />
+      <Stack.Screen name="AddTenant" component={AddTenant} />
     </Stack.Navigator>
   );
 };

@@ -5,12 +5,14 @@ import Styles from '../../helper/Styles';
 import EditScreensContainer from '../../components/EditScreensContainer';
 import Button from '../../components/Button';
 
-const EditProfile = ({navigation}) => {
+const AddTenant = ({navigation}) => {
   return (
-    <EditScreensContainer navigation={navigation} title="Edit Profile">
+    <EditScreensContainer navigation={navigation} title="Add Tenant">
       <Text style={{...styles.text, marginTop: height(4)}}>First Name</Text>
       <TextInput value="" style={styles.input} />
       <Text style={styles.text}>Last Name</Text>
+      <TextInput value="" style={styles.input} />
+      <Text style={styles.text}>Email</Text>
       <TextInput value="" style={styles.input} />
       <Text style={styles.text}>Phone</Text>
       <TextInput value="" style={styles.input} />
@@ -19,13 +21,13 @@ const EditProfile = ({navigation}) => {
           backgroundColor: Colors.brown,
           marginTop: height(5),
         }}>
-        Edit
+        Add
       </Button>
     </EditScreensContainer>
   );
 };
 
-export default EditProfile;
+export default AddTenant;
 
 const styles = StyleSheet.create({
   input: {

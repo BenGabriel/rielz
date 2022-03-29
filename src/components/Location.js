@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, View} from 'react-native';
-import {Ionicons} from './Icons';
-import {Colors, height, width} from './Index';
+import {Ionicons} from '../common/Icons';
+import {Colors, height, width} from '../helper/Index';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const GOOGLE_API = 'AIzaSyCGPY_hsHcarYRmtuyvZCTOyoRWGN7-JGA';

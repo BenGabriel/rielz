@@ -8,13 +8,15 @@ import {
   FlatList,
 } from 'react-native';
 import {height, Colors} from '../../helper/Index';
-import {Ionicons} from '../../helper/Icons';
+import {Ionicons} from '../../common/Icons';
 import {SharedElement} from 'react-navigation-shared-element';
 import Styles from '../../helper/Styles';
-import HouseCard from '../../helper/HouseCard';
+import HouseCard from '../../components/HouseCard';
 
 const LandlordDetails = ({navigation}) => {
-  //House Car
+  
+  const data = [...Array(12 - 1 + 1).keys()];
+
   return (
     <View style={{flex: 1, padding: height(2)}}>
       <View style={styles.textContainer}>
@@ -39,10 +41,12 @@ const LandlordDetails = ({navigation}) => {
         </View>
       </View>
       <FlatList
-        data={Array(10)}
-        renderItem={({index}) => <HouseCard item={index} navigation={navigation}/>}
-        keyExtractor={() => Math.random(7)}
+        data={data}
+        renderItem={({item}) => <HouseCard item={item} />}
+        keyExtractor={(item) => `${item}`}
         showsVerticalScrollIndicator={false}
+        numColumns={2}
+        ListFooterComponent={() => <View style={{padding: 30}} />}
       />
     </View>
   );

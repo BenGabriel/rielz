@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   Image,
@@ -6,14 +6,33 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Animated,
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
-import {Ionicons, FontAwesome5} from '../../helper/Icons';
+import {Ionicons, FontAwesome5} from '../../common/Icons';
 
 const HouseDetails = ({navigation, route}) => {
   const {item} = route.params;
+
+  const val = new Animated.Value(50);
+
+  const animateValues = () =>
+    Animated.timing(val, {
+      toValue: -10,
+      duration: 800,
+      useNativeDriver: false,
+    }).start();
+
+  useEffect(() => {
+    animateValues();
+  }, []);
+
+  const mainInterpolate = val.interpolate({
+    inputRange: [0, 200],
+    outputRange: [0, 400],
+  });
 
   const controlClick = () => {
     console.log('hi');
@@ -64,7 +83,7 @@ const HouseDetails = ({navigation, route}) => {
         />
       </View>
       <View style={styles.secContainer}>
-        <View style={styles.details}>
+        <Animated.View style={{...styles.details, marginTop: mainInterpolate}}>
           <Text style={Styles.text(Colors.black, 1.8, true)}>house type</Text>
           <Text style={Styles.text(Colors.grey, 1.6, false)}>Location</Text>
           <View style={{flexDirection: 'row', marginTop: 6}}>
@@ -77,7 +96,7 @@ const HouseDetails = ({navigation, route}) => {
               <Text style={Styles.text(Colors.grey, 1.5, false)}>2</Text>
             </View>
           </View>
-        </View>
+        </Animated.View>
         <Text style={{...Styles.text('#aaa', 1.6, false), marginTop: -20}}>
           Clean and neat house with modern interior built in the midle of the
           city making it easier for you to access the city center

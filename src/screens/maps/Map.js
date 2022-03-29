@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {PermissionsAndroid, Platform, StyleSheet, View} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import {Ionicons} from '../../helper/Icons';
+import {Ionicons} from '../../common/Icons';
 import Geolocation from 'react-native-geolocation-service';
 import {width} from '../../helper/Index';
 

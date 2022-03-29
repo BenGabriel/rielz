@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import Button from '../../helper/Button';
-import {Ionicons, FontAwesome5} from '../../helper/Icons';
+import Button from '../../components/Button';
+import {Ionicons, FontAwesome5} from '../../common/Icons';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 

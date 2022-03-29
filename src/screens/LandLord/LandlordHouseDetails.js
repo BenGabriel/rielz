@@ -9,33 +9,37 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
-import {Ionicons, FontAwesome5} from '../../helper/Icons';
+import {Ionicons, FontAwesome5} from '../../common/Icons';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 
 const LandlordHouseDetails = ({navigation, route}) => {
   const {index} = route.params;
-  console.log(index);
+
+  const data = [...Array(7 - 1 + 1).keys()];
+
   return (
-    <View style={{flex: 1, padding: height(2), paddingRight: height(0)}}>
-      <View
-        style={{
-          width: '95%',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'row',
-          paddingVertical: height(1),
-        }}>
+    <View
+      style={{
+        padding: height(2),
+        paddingRight: height(0),
+        paddingBottom: height(10),
+      }}>
+      <View style={styles.topNav}>
         <Ionicons
           name="chevron-back-sharp"
           style={styles.icon}
           size={width(5)}
           onPress={() => navigation.goBack()}
         />
-        <Text style={Styles.text('blue', 1.8, true)} onPress={() => navigation.navigate('EditHouse')}>Edit</Text>
+        <Text
+          style={Styles.text('blue', 1.8, true)}
+          onPress={() => navigation.navigate('EditHouse')}>
+          Edit
+        </Text>
       </View>
       <ScrollView
-        style={{flex: 1, padding: 10, paddingRight: height(0)}}
+        style={{padding: 10, paddingRight: height(0)}}
         showsVerticalScrollIndicator={false}>
         <Text style={Styles.text('#333', 2, true)}>Location</Text>
         <Text style={{...Styles.text('#999', 1.8, true), marginTop: 8}}>
@@ -45,7 +49,7 @@ const LandlordHouseDetails = ({navigation, route}) => {
           <View
             style={{
               alignItems: 'center',
-              height: '70%',
+              height: height(60),
               width: '25%',
               justifyContent: 'center',
               marginTop: -30,
@@ -88,7 +92,7 @@ const LandlordHouseDetails = ({navigation, route}) => {
         <Text
           style={{
             ...Styles.text('#888', 1.8, false),
-            marginTop: 25,
+            marginTop: height(1),
             width: '95%',
           }}>
           Clean and neat house with modern interior built in the midle of the
@@ -127,6 +131,49 @@ const LandlordHouseDetails = ({navigation, route}) => {
           <Text style={Styles.text(Colors.grey, 1.7, false)}>Price</Text>
           <Text style={Styles.text(Colors.black, 2, true)}>₦900</Text>
         </View>
+        <View style={{paddingRight: height(2), marginBottom: height(2)}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: height(2),
+            }}>
+            <Text style={Styles.text(Colors.black, 1.8, true)}>Tenants</Text>
+            <Text
+              style={{...Styles.text('blue', 1.8, true), marginRight: 16}}
+              onPress={() => navigation.navigate('AddTenant')}>
+              Add
+            </Text>
+          </View>
+          {data.map(i => (
+            <View key={i} style={styles.eachTenant}>
+              <View style={styles.tenantInitial}>
+                <Text
+                  style={{
+                    ...Styles.text(Colors.white, 2.5, true),
+                  }}>
+                  P
+                </Text>
+              </View>
+              <View
+                style={{
+                  marginLeft: height(2),
+                }}>
+                <Text style={Styles.text(Colors.black, 2, true)}>
+                  paul breakthrough onyebuchi odinaka
+                </Text>
+                <Text
+                  style={{
+                    ...Styles.text(Colors.black, 1.8, true),
+                    marginTop: 5,
+                  }}>
+                  simeongabriel175@gmai.com.ng.bamidele
+                </Text>
+              </View>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -146,6 +193,13 @@ LandlordHouseDetails.sharedElements = (route, otherRoute, showing) => {
 export default LandlordHouseDetails;
 
 const styles = StyleSheet.create({
+  topNav: {
+    width: '95%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingVertical: height(1),
+  },
   icon: {
     padding: height(1.5),
     borderRadius: 100,
@@ -156,7 +210,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: height(3),
+    marginTop: height(1),
   },
   secIcons: {
     marginVertical: height(2),
@@ -167,5 +221,22 @@ const styles = StyleSheet.create({
     height: width(20),
     borderRadius: 10,
     marginRight: 10,
+  },
+  eachTenant: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: height(1),
+    backgroundColor: '#fff',
+    elevation: 1,
+    borderRadius: 10,
+    marginVertical: height(0.5),
+  },
+  tenantInitial: {
+    width: 45,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
+    backgroundColor: Colors.brown,
   },
 });

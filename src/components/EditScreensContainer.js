@@ -1,8 +1,8 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { Colors, height, width } from './Index';
-import Styles from './Styles';
-import {Ionicons} from './Icons';
+import { Colors, height, width } from '../helper/Index';
+import Styles from '../helper/Styles';
+import {Ionicons} from '../common/Icons';
 
 const EditScreensContainer = props => {
   return (

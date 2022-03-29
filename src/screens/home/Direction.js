@@ -6,11 +6,11 @@ import {
   PermissionsAndroid,
   Platform,
   Image,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {Ionicons, FontAwesome5} from '../../helper/Icons';
+import {Ionicons, FontAwesome5} from '../../common/Icons';
 import {Colors, width} from '../../helper/Index';
 import MapViewDirections from 'react-native-maps-directions';
 import Styles from '../../helper/Styles';
@@ -129,24 +129,10 @@ const Direction = ({navigation}) => {
             }}
           />
         </MapView>
-        <TouchableOpacity
+        <Pressable
           style={styles.details}
           onPress={() => navigation.replace('HouseDetails', {item})}>
           <View style={styles.imageContainer}>
-            <Text
-              style={{
-                ...Styles.text('white', 1.2, false),
-                position: 'absolute',
-                zIndex: 20,
-                right: 0,
-                padding: 6,
-                paddingHorizontal: 10,
-                backgroundColor: 'red',
-                borderTopRightRadius: 20,
-                borderBottomLeftRadius: 10,
-              }}>
-              For rent
-            </Text>
             <SharedElement id={`item.${item}.photo`}>
               <Image
                 source={require('../../assets/images/image.jpg')}
@@ -175,7 +161,7 @@ const Direction = ({navigation}) => {
               </View>
             </View>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

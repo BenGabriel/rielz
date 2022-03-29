@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Styles from './Styles';
-import {MaterialCommunityIcons} from './Icons';
-import {Colors, height, width} from './Index';
+import Styles from '../helper/Styles';
+import {MaterialCommunityIcons} from '../common/Icons';
+import {Colors, height, width} from '../helper/Index';
 
 const Picker = props => {
   const {placeholder, value, item, setValue, style} = props;
