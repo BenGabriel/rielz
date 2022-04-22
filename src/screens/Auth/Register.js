@@ -6,23 +6,29 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
 } from 'react-native';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import {Ionicons} from '../../common/Icons';
 import Button from '../../components/Button';
+import Input from '../../common/Input';
+import Typography from '../../common/Typography';
 
 const Register = ({navigation}) => {
-  const [registerDetails, setRegisterDetails] = useState({
-    email: '',
-    password: '',
-    firstname: '',
-    lastname: '',
-    phoneNumber: '',
-  });
+  const [registerDetails, setRegisterDetails] = useState({});
 
-  const {email, password, firstname, lastname, phoneNumber} = registerDetails;
+  const navigateToLogin = () => {
+    navigation.goBack();
+  };
+
+  const onChange = ({name, text}) => {
+    setRegisterDetails({...registerDetails, [name]: text});
+  };
+
+  const handleRegister = () => {
+    console.log(registerDetails);
+  };
+
   return (
     <ScrollView
       style={{flex: 1, width: width(100)}}
@@ -34,7 +40,7 @@ const Register = ({navigation}) => {
           name="chevron-back-sharp"
           style={styles.icon}
           size={width(5)}
-          onPress={() => navigation.goBack()}
+          onPress={navigateToLogin}
         />
 
         <Image
@@ -46,64 +52,43 @@ const Register = ({navigation}) => {
             marginTop: height(-8),
           }}
         />
-        <Text style={Styles.text('#333', 3, false)}>Register</Text>
-        <Text
-          style={{...Styles.text('#333', 2, false), marginVertical: height(1)}}>
-          Kindly complete the information
-        </Text>
+        <Typography text="Register" size={3} />
+        <Typography
+          text="Kindly complete the information"
+          size={2}
+          style={{marginVertical: height(1)}}
+        />
         <View
           style={{width: '100%', marginTop: height(3), alignItems: 'center'}}>
-          <TextInput
-            value={firstname}
+          <Input
             placeholder="First Name"
-            style={styles.input}
-            onChangeText={text =>
-              setRegisterDetails({...registerDetails, firstname: text})
-            }
+            onChangeText={text => onChange({name: 'firstname', text})}
           />
-          <TextInput
-            value={lastname}
+          <Input
             placeholder="Last Name"
-            style={styles.input}
-            onChangeText={text =>
-              setRegisterDetails({...registerDetails, lastname: text})
-            }
+            onChangeText={text => onChange({name: 'lastname', text})}
           />
-          <TextInput
-            value={email}
+          <Input
             placeholder="Email"
-            style={styles.input}
-            onChangeText={text =>
-              setRegisterDetails({...registerDetails, email: text})
-            }
+            onChangeText={text => onChange({name: 'email', text})}
           />
-          <TextInput
-            value={phoneNumber}
+          <Input
             placeholder="Phone Number"
-            style={styles.input}
-            onChangeText={text =>
-              setRegisterDetails({...registerDetails, phoneNumber: text})
-            }
+            onChangeText={text => onChange({name: 'phoneNumber', text})}
           />
-          <TextInput
-            value={password}
+          <Input
             placeholder="Password"
-            style={styles.input}
-            onChangeText={text =>
-              setRegisterDetails({...registerDetails, password: text})
-            }
+            onChangeText={text => onChange({name: 'password', text})}
           />
         </View>
-        <Button style={{marginTop: height(5)}}>Sign Up</Button>
+        <Button style={{marginTop: height(5)}} onPress={handleRegister}>Sign Up</Button>
         <Text
           style={{
             ...Styles.text(Colors.grey, 1.7, false),
             marginTop: height(1),
           }}>
           Have an account?{' '}
-          <Text
-            style={{color: Colors.primary}}
-            onPress={() => navigation.navigate('Register')}>
+          <Text style={{color: Colors.primary}} onPress={navigateToLogin}>
             Login
           </Text>
         </Text>

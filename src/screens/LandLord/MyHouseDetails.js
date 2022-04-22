@@ -10,10 +10,11 @@ import {
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
 import {Ionicons, FontAwesome5} from '../../common/Icons';
+import Typography from '../../common/Typography';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 
-const LandlordHouseDetails = ({navigation, route}) => {
+const MyHouseDetails = ({navigation, route}) => {
   const {index} = route.params;
 
   const data = [...Array(7 - 1 + 1).keys()];
@@ -160,16 +161,21 @@ const LandlordHouseDetails = ({navigation, route}) => {
                 style={{
                   marginLeft: height(2),
                 }}>
-                <Text style={Styles.text(Colors.black, 2, true)}>
-                  paul breakthrough onyebuchi odinaka
-                </Text>
-                <Text
+                <Typography
+                  text="paul breakthrough onyebuchi odinaka"
+                  bold
+                  color={Colors.black}
+                  size={2}
+                />
+                <Typography
+                  text="simeongabriel175@gmai.com.ng.bamidele"
+                  bold
+                  color={Colors.black}
                   style={{
-                    ...Styles.text(Colors.black, 1.8, true),
                     marginTop: 5,
-                  }}>
-                  simeongabriel175@gmai.com.ng.bamidele
-                </Text>
+                  }}
+                  size={1.8}
+                />
               </View>
             </View>
           ))}
@@ -179,7 +185,7 @@ const LandlordHouseDetails = ({navigation, route}) => {
   );
 };
 
-LandlordHouseDetails.sharedElements = (route, otherRoute, showing) => {
+MyHouseDetails.sharedElements = (route, otherRoute, showing) => {
   const {index} = route.params;
 
   return [
@@ -190,7 +196,7 @@ LandlordHouseDetails.sharedElements = (route, otherRoute, showing) => {
   ];
 };
 
-export default LandlordHouseDetails;
+export default MyHouseDetails;
 
 const styles = StyleSheet.create({
   topNav: {

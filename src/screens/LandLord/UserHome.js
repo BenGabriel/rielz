@@ -2,29 +2,29 @@ import React from 'react';
 import {
   Animated,
   Dimensions,
-  Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {height} from '../../helper/Index';
-import Styles from '../../helper/Styles';
+import {height, width as it} from '../../helper/Index';
 import {SharedElement} from 'react-navigation-shared-element';
+import {Ionicons} from '../../common/Icons';
+import Typography from '../../common/Typography';
 
 const {width} = Dimensions.get('window');
 
-const item_size = width * 0.68;
-const item_height = item_size * 1.5;
-const full_size = item_size + 12 * 2;
+const item_width = width * 0.6;
+const item_height = item_width * 1.5;
 
-const LandLordHome = ({navigation}) => {
+const UserHome = ({navigation}) => {
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+
   //card
   const Card = ({index, scrollX}) => {
     const inputRange = [
-      (index - 1) * full_size,
-      index * full_size,
-      (index + 1) * full_size,
+      (index - 1) * item_width,
+      index * item_width,
+      (index + 1) * item_width,
     ];
 
     const scale = scrollX.interpolate({
@@ -33,9 +33,9 @@ const LandLordHome = ({navigation}) => {
       extrapolate: 'clamp',
     });
 
-    const TexttranslateY = scrollX.interpolate({
+    const opacity = scrollX.interpolate({
       inputRange,
-      outputRange: [0, 10, 0],
+      outputRange: [0, 1, 0],
       extrapolate: 'clamp',
     });
 
@@ -44,13 +44,16 @@ const LandLordHome = ({navigation}) => {
         style={styles.card}
         activeOpacity={0.6}
         onPress={() =>
-          navigation.navigate('LandlordHouseDetails', {
-            index,
+          navigation.navigate('Details', {
+            screen: 'MyHouseDetails',
+            params: {
+              index,
+            },
           })
         }>
         <SharedElement
           id={`item.${index}.photo`}
-          style={StyleSheet.absoluteFillObject}>
+          style={{height: item_height, width: item_width, padding: 12}}>
           <Animated.Image
             source={require('../../assets/images/image.jpg')}
             style={{
@@ -64,80 +67,71 @@ const LandLordHome = ({navigation}) => {
         </SharedElement>
         <Animated.View
           style={{
-            transform: [
-              {
-                translateY: TexttranslateY,
-              },
-            ],
-            bottom: height(-50),
+            opacity,
+            marginTop: 10,
           }}>
-          <Text
+          <Typography
+            text="House Type"
+            bold
+            size={2}
             style={{
-              ...Styles.text('#333', 2, true),
               marginTop: height(4),
-              textAlign: 'center',
-            }}>
-            House Type {index}
-          </Text>
-          <Text
+            }}
+          />
+          <Typography
+            text="location"
+            size={1.7}
+            color="#777"
             style={{
-              ...Styles.text('#777', 1.7, false),
               marginTop: height(1),
               textAlign: 'center',
-            }}>
-            Location
-          </Text>
+            }}
+          />
         </Animated.View>
       </TouchableOpacity>
     );
   };
 
-  const scrollX = React.useRef(new Animated.Value(0)).current;
-
   return (
     <View style={{flex: 1, padding: 10}}>
-      <Image
-        source={require('../../assets/images/logo.png')}
-        style={{
-          height: 25,
-          width: 25,
-        }}
+      <Ionicons
+        name="chevron-back-sharp"
+        style={styles.icon}
+        size={it(5)}
+        onPress={() => navigation.goBack()}
       />
-      <Text
-        style={{
-          ...Styles.text('#333', 2, true),
-          marginLeft: height(6),
-        }}>
-        Welcome chidi paul
-      </Text>
-      {/* <Text style={{...Styles.text('#333', 2, true), marginTop: height(4), textAlign:'center'}}>Your houses</Text>
-       */}
       <Animated.FlatList
         data={Array(30)}
         renderItem={({item, index}) => <Card index={index} scrollX={scrollX} />}
         horizontal
-        scrollEventThrottle={300}
+        scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: scrollX}}}],
           {useNativeDriver: true},
         )}
-        snapToInterval={full_size}
+        snapToInterval={item_width}
         decelerationRate={0}
-        bounces={false}
       />
     </View>
   );
 };
 
-export default LandLordHome;
+export default UserHome;
 
 const styles = StyleSheet.create({
   card: {
-    width: item_size,
-    height: item_height,
-    marginTop: height(10),
-    margin: 12,
+    width: item_width,
+    marginTop: height(8),
     alignItems: 'center',
+  },
+  icon: {
+    padding: height(1.5),
+    borderRadius: 100,
+    backgroundColor: '#fff',
+    alignSelf: 'flex-start',
+    marginTop: height(2),
+    marginLeft: height(3),
+    elevation: 2
   },
 });

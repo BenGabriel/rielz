@@ -39,15 +39,11 @@ const HouseCard = ({item}) => {
         <View style={{width: '45%'}}>
           <Text style={Styles.text('#333', 1.6, false)}>house type</Text>
           <Text style={Styles.text('#333', 1.6, false)}>state{item}</Text>
+          <Text
+            style={{...Styles.text(Colors.primary, 1.6, false), marginTop: 2}}>
+            ₦900k
+          </Text>
         </View>
-        {/* <View style={{alignItems: 'center'}}>
-          <Ionicons name="bed-outline" size={20} color={Colors.primary} />
-          <Text style={Styles.text(Colors.primary, 1.6, false)}>3</Text>
-        </View>
-        <Text
-          style={{...Styles.text(Colors.primary, 1.6, false), marginTop: 2}}>
-          ₦900k
-        </Text> */}
         <Ionicons
           name="location-sharp"
           size={18}
@@ -81,12 +77,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: height(1.5),
     height: height(27),
-    marginBottom: -35
+    marginBottom: -35,
   },
   imageContainer: {
     width: '99%',
     height: height(18),
-    alignSelf:'center'
+    alignSelf: 'center',
   },
   houseCardbottom: {
     flexDirection: 'row',

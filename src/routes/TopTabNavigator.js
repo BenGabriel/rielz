@@ -6,11 +6,16 @@ import Search from '../screens/search/Search';
 import {Ionicons, AntDesign} from '../common/Icons';
 import {Colors} from '../helper/Index';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import Profile from '../screens/LandLord/Profile';
+import EditProfile from '../screens/LandLord/EditProfile';
+import UserHome from '../screens/LandLord/UserHome';
+import Add from '../screens/LandLord/Add';
 
 const Tab = createMaterialTopTabNavigator();
 const HomeStack = createSharedElementStackNavigator();
 const SearchStack = createSharedElementStackNavigator();
 const MapStack = createSharedElementStackNavigator();
+const ProfileStack = createSharedElementStackNavigator();
 
 const HomeStackScreen = () => {
   return (
@@ -40,6 +45,17 @@ const MapStackScreen = () => {
   );
 };
 
+const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator screenOptions={{headerShown: false}}>
+      <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen name="EditProfile" component={EditProfile} />
+      <ProfileStack.Screen name="OwnerDashboard" component={UserHome} />
+      <ProfileStack.Screen name="AddHouse" component={Add} />
+    </ProfileStack.Navigator>
+  );
+};
+
 const TopTabNavigator = ({navigation}) => {
   return (
     <Tab.Navigator
@@ -52,6 +68,7 @@ const TopTabNavigator = ({navigation}) => {
         tabBarIndicatorStyle: {
           backgroundColor: 'white',
         },
+        swipeEnabled: false,
       }}>
       <Tab.Screen
         name="Home"
@@ -87,6 +104,19 @@ const TopTabNavigator = ({navigation}) => {
           tabBarIcon: ({color, focused}) => (
             <AntDesign
               name="find"
+              size={20}
+              color={focused ? color : '#542e22'}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileStackScreen}
+        options={{
+          tabBarIcon: ({color, focused}) => (
+            <AntDesign
+              name="user"
               size={20}
               color={focused ? color : '#542e22'}
             />

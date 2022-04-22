@@ -6,20 +6,28 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
 } from 'react-native';
-import {Colors, height, width} from '../../helper/Index';
+import {Colors, height, width, snackHandler} from '../../helper/Index';
 import Styles from '../../helper/Styles';
-import {Ionicons} from '../../common/Icons';
 import Button from '../../components/Button';
+import Input from '../../common/Input';
+import Typography from '../../common/Typography';
 
 const Login = ({navigation}) => {
-  const [loginDetails, setLoginDetails] = useState({
-    email: '',
-    password: '',
-  });
+  const [loginDetails, setLoginDetails] = useState({});
 
-  const {email, password} = loginDetails;
+  const navigateToRegister = () => {
+    navigation.navigate('Register');
+  };
+
+  const onChange = ({name, value}) => {
+    setLoginDetails({...loginDetails, [name]: value});
+  };
+
+  const handleLogin = () => {
+    console.log(loginDetails);
+    navigation.replace('Stack');
+  };
 
   return (
     <ScrollView
@@ -27,45 +35,35 @@ const Login = ({navigation}) => {
       showsVerticalScrollIndicator={false}>
       <ImageBackground
         source={require('../../assets/images/authbackground.png')}
-        style={{width: width(100), height: height(100), alignItems: 'center'}}>
-        <Ionicons
-          name="chevron-back-sharp"
-          style={styles.icon}
-          size={width(5)}
-          onPress={() => navigation.goBack()}
-        />
-
+        style={{
+          width: width(100),
+          height: height(100),
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <Image
           source={require('../../assets/images/logo1.png')}
           style={{width: 200, height: 200, marginBottom: height(-3)}}
         />
-        <Text style={Styles.text('#333', 3, false)}>Welcome</Text>
-        <Text
-          style={{...Styles.text('#333', 2, false), marginVertical: height(1)}}>
-          Sign in as a Landlord
-        </Text>
+        <Typography text="Welcome" size={3} />
+        <Typography
+          text="Sign In"
+          size={2}
+          style={{marginVertical: height(1)}}
+        />
+
         <View
           style={{width: '100%', marginTop: height(3), alignItems: 'center'}}>
-          <TextInput
-            value={email}
+          <Input
             placeholder="Email"
-            style={styles.input}
-            onChangeText={text =>
-              setLoginDetails({...loginDetails, email: text})
-            }
+            onChangeText={value => onChange({name: 'email', value})}
           />
-          <TextInput
-            value={password}
+          <Input
             placeholder="Password"
-            style={styles.input}
-            onChangeText={text =>
-              setLoginDetails({...loginDetails, password: text})
-            }
+            onChangeText={value => onChange({name: 'password', value})}
           />
         </View>
-        <Button
-          style={{marginTop: height(5)}}
-          onPress={() => navigation.replace('LandLord')}>
+        <Button style={{marginTop: height(5)}} onPress={handleLogin}>
           Login
         </Button>
         <Text
@@ -74,9 +72,7 @@ const Login = ({navigation}) => {
             marginTop: height(1),
           }}>
           Don’t have an account?{' '}
-          <Text
-            style={{color: Colors.primary}}
-            onPress={() => navigation.navigate('Register')}>
+          <Text style={{color: Colors.primary}} onPress={navigateToRegister}>
             Sign up
           </Text>
         </Text>

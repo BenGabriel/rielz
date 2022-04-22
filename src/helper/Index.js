@@ -13,12 +13,12 @@ export const Colors = {
   black: '#333',
   grey: '#A0A7BA',
   secondary: '#38b5ff',
-  brown:'#59534d'
+  brown: '#59534d',
 };
 
-export const snackHandler = text => {
+export const snackHandler = (text, type) => {
   return Snackbar.show({
-    backgroundColor: Colors.primary,
+    backgroundColor: type === 'error' ? '#f00' : Colors.primary,
     text,
     duration: Snackbar.LENGTH_SHORT,
   });

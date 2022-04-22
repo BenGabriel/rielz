@@ -22,16 +22,16 @@ const App = () => {
     if (Platform.OS === 'ios') {
       const auth = await Geolocation.requestAuthorization('whenInUse');
       if (auth === 'granted') {
-        console.log(auth)
+        console.log(auth);
       }
     }
-    
+
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-       console.log(granted)
+        console.log(granted);
       }
     }
   }
@@ -41,7 +41,6 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="Stack" component={TopTabNavigator} />
         <Stack.Screen
           name="Details"
           component={StackNavigator}
@@ -49,6 +48,7 @@ const App = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen name="Stack" component={TopTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

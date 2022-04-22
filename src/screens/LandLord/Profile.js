@@ -1,11 +1,22 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Button from '../../components/Button';
-import {Ionicons, FontAwesome5} from '../../common/Icons';
+import {Ionicons} from '../../common/Icons';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 
 const Profile = ({navigation}) => {
+  const logOut = () => {
+    navigation.replace('Details');
+  };
+
+  const navigateToHouses = () => {
+    navigation.navigate('OwnerDashboard');
+  };
+
+  const navigateToAddHouses = () => {
+    navigation.navigate('AddHouse');
+  };
   return (
     <View style={styles.container}>
       <Image
@@ -34,7 +45,27 @@ const Profile = ({navigation}) => {
           Phone
         </Text>
       </View>
-      <TouchableOpacity style={styles.userDetails}>
+      <TouchableOpacity style={styles.userDetails} onPress={navigateToHouses}>
+        <Ionicons name="home-outline" size={width(5)} color={Colors.brown} />
+        <Text
+          style={{...Styles.text('#333', 1.8, false), marginLeft: height(4)}}>
+          My Houses
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.userDetails}
+        onPress={navigateToAddHouses}>
+        <Ionicons
+          name="add-circle-outline"
+          size={width(5)}
+          color={Colors.brown}
+        />
+        <Text
+          style={{...Styles.text('#333', 1.8, false), marginLeft: height(4)}}>
+          Add house
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.userDetails} onPress={logOut}>
         <Ionicons name="log-out" size={width(5)} color={Colors.brown} />
         <Text
           style={{...Styles.text('#333', 1.8, false), marginLeft: height(4)}}>
@@ -44,10 +75,9 @@ const Profile = ({navigation}) => {
       <Button
         style={{
           marginTop: height(4),
-          backgroundColor:'#59534d'
+          backgroundColor: '#59534d',
         }}
-        onPress={() => navigation.navigate('EditProfile')}
-        >
+        onPress={() => navigation.navigate('EditProfile')}>
         Edit Profile
       </Button>
     </View>
