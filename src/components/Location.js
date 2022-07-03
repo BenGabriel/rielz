@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, View} from 'react-native';
 import {Ionicons} from '../common/Icons';
-import {Colors, height, width} from '../helper/Index';
+import {height, width} from '../helper/Index';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const GOOGLE_API = 'AIzaSyCGPY_hsHcarYRmtuyvZCTOyoRWGN7-JGA';
@@ -53,8 +53,8 @@ const Location = props => {
                   console.log(data, 'data');
                   console.log(details, 'details');
                   setValue(data.description);
-                  setLat(details.geometry.location.lat)
-                  setLng(details.geometry.location.lng)
+                  setLat(details.geometry.location.lat);
+                  setLng(details.geometry.location.lng);
                   setDisplay(false);
                 }}
                 query={{

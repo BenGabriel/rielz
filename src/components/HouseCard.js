@@ -9,20 +9,20 @@ import {useNavigation} from '@react-navigation/native';
 const HouseCard = ({item}) => {
   const navigation = useNavigation();
 
+  const navigate = () => {
+    navigation.push('Details', {
+      screen: 'HouseDetails',
+      params: {item},
+    });
+  };
+
   return (
     <View
       style={{
         ...styles.houseCard,
         marginTop: item % 2 == 0 ? 20 : 50,
       }}>
-      <Pressable
-        style={styles.imageContainer}
-        onPress={() =>
-          navigation.push('Details', {
-            screen: 'HouseDetails',
-            params: {item},
-          })
-        }>
+      <Pressable style={styles.imageContainer} onPress={navigate}>
         <SharedElement id={`item.${item}.photo`}>
           <Image
             source={require('../assets/images/image.jpg')}
@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
   houseCardbottom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '90%',
     alignSelf: 'center',
+    width: '90%',
     marginTop: height(1.5),
   },
 });

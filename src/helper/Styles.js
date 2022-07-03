@@ -19,6 +19,11 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  flexRowSpaceCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default Styles;

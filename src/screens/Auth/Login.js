@@ -10,8 +10,8 @@ import {
 import {Colors, height, width, snackHandler} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import Button from '../../components/Button';
-import Input from '../../common/Input';
-import Typography from '../../common/Typography';
+import Input from '../../components/Input';
+import Typography from '../../components/Typography';
 
 const Login = ({navigation}) => {
   const [loginDetails, setLoginDetails] = useState({});

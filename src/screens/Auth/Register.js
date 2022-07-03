@@ -11,8 +11,8 @@ import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import {Ionicons} from '../../common/Icons';
 import Button from '../../components/Button';
-import Input from '../../common/Input';
-import Typography from '../../common/Typography';
+import Input from '../../components/Input';
+import Typography from '../../components/Typography';
 
 const Register = ({navigation}) => {
   const [registerDetails, setRegisterDetails] = useState({});

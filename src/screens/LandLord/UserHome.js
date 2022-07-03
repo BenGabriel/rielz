@@ -9,7 +9,7 @@ import {
 import {height, width as it} from '../../helper/Index';
 import {SharedElement} from 'react-navigation-shared-element';
 import {Ionicons} from '../../common/Icons';
-import Typography from '../../common/Typography';
+import Typography from '../../components/Typography';
 
 const {width} = Dimensions.get('window');
 

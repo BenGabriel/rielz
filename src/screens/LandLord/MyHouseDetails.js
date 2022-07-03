@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
 import {Ionicons, FontAwesome5} from '../../common/Icons';
-import Typography from '../../common/Typography';
+import Typography from '../../components/Typography';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 
