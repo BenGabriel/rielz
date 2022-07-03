@@ -53,14 +53,16 @@ const Login = ({navigation}) => {
         />
 
         <View
-          style={{width: '100%', marginTop: height(3), alignItems: 'center'}}>
+          style={{width: '80%', marginTop: height(3), alignItems: 'center'}}>
           <Input
             placeholder="Email"
             onChangeText={value => onChange({name: 'email', value})}
+            rounded
           />
           <Input
             placeholder="Password"
             onChangeText={value => onChange({name: 'password', value})}
+            rounded
           />
         </View>
         <Button style={{marginTop: height(5)}} onPress={handleLogin}>

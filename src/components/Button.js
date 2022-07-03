@@ -6,7 +6,7 @@ import Styles from '../helper/Styles';
 
 const Button = props => {
   return (
-    <TouchableOpacity {...props} style={{...styles.button, ...props.style}}>
+    <TouchableOpacity {...props} style={{...styles.button, ...props.style}} activeOpacity={0.5}>
       {props.load ? (
         <BarIndicator color="white" size={20} count={6} />
       ) : (

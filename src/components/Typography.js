@@ -6,9 +6,9 @@ const Typography = ({text, size, color, bold, style}) => {
   return (
     <Text
       style={{
-          color: color ? color : '#000',
+        color: color ? color : '#000',
         fontSize: size ? font(size) : font(1.8),
-        fontFamily: bold ? 'DMSans-Bold' : 'DMSans-Regular',
+        fontWeight: bold ? '700' : '400',
         ...style,
       }}>
       {text}
@@ -17,4 +17,3 @@ const Typography = ({text, size, color, bold, style}) => {
 };
 
 export default Typography;
-

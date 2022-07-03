@@ -1,10 +1,10 @@
-import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
+import {Image, StyleSheet, View, Pressable} from 'react-native';
 import React from 'react';
 import {SharedElement} from 'react-navigation-shared-element';
-import Styles from '../helper/Styles';
 import {height, Colors} from '../helper/Index';
 import {Ionicons} from '../common/Icons';
 import {useNavigation} from '@react-navigation/native';
+import Typography from './Typography';
 
 const HouseCard = ({item}) => {
   const navigation = useNavigation();
@@ -37,12 +37,14 @@ const HouseCard = ({item}) => {
       </Pressable>
       <View style={styles.houseCardbottom}>
         <View style={{width: '45%'}}>
-          <Text style={Styles.text('#333', 1.6, false)}>house type</Text>
-          <Text style={Styles.text('#333', 1.6, false)}>state{item}</Text>
-          <Text
-            style={{...Styles.text(Colors.primary, 1.6, false), marginTop: 2}}>
-            ₦900k
-          </Text>
+          <Typography size={1.6} color="#333" text="house type" />
+          <Typography size={1.6} color="#333" text={`state ${item}`} />
+          <Typography
+            size={1.6}
+            color={Colors.primary}
+            text={`₦90${item}k`}
+            style={{marginTop: 2}}
+          />
         </View>
         <Ionicons
           name="location-sharp"

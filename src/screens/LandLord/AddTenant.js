@@ -1,24 +1,36 @@
-import {StyleSheet, Text, TextInput} from 'react-native';
-import React from 'react';
-import {Colors, height} from '../../helper/Index';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {height} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import EditScreensContainer from '../../components/EditScreensContainer';
 import Button from '../../components/Button';
+import Input from '../../components/Input';
 
 const AddTenant = ({navigation}) => {
+  const [tenant, setTenant] = useState({});
+  const onChange = useCallback(
+    ({name, value}) => {
+      setTenant({...tenant, [name]: value});
+    },
+    [tenant],
+  );
   return (
     <EditScreensContainer navigation={navigation} title="Add Tenant">
-      <Text style={{...styles.text, marginTop: height(4)}}>First Name</Text>
-      <TextInput value="" style={styles.input} />
-      <Text style={styles.text}>Last Name</Text>
-      <TextInput value="" style={styles.input} />
-      <Text style={styles.text}>Email</Text>
-      <TextInput value="" style={styles.input} />
-      <Text style={styles.text}>Phone</Text>
-      <TextInput value="" style={styles.input} />
+      <View style={{marginTop: height(2), width: '90%', alignSelf: 'center'}}>
+        <Text style={styles.text}>First Name</Text>
+        <Input onChangeText={value => onChange({name: 'firstName', value})} />
+        <Text style={styles.text}>Last Name</Text>
+        <Input onChangeText={value => onChange({name: 'lastName', value})} />
+        <Text style={styles.text}>Email</Text>
+        <Input onChangeText={value => onChange({name: 'email', value})} />
+        <Text style={styles.text}>Phone</Text>
+        <Input
+          onChangeText={value => onChange({name: 'phone', value})}
+          numeric
+        />
+      </View>
       <Button
         style={{
-          backgroundColor: Colors.brown,
           marginTop: height(5),
         }}>
         Add
@@ -41,6 +53,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...Styles.text('#333', 1.8, true),
-    marginLeft: height(2),
+    marginLeft: height(1),
+    marginTop: height(3),
   },
 });

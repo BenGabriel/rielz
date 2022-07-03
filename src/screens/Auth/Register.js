@@ -59,26 +59,31 @@ const Register = ({navigation}) => {
           style={{marginVertical: height(1)}}
         />
         <View
-          style={{width: '100%', marginTop: height(3), alignItems: 'center'}}>
+          style={{width: '80%', marginTop: height(3), alignItems: 'center'}}>
           <Input
             placeholder="First Name"
             onChangeText={text => onChange({name: 'firstname', text})}
+            rounded
           />
           <Input
             placeholder="Last Name"
             onChangeText={text => onChange({name: 'lastname', text})}
+            rounded
           />
           <Input
             placeholder="Email"
             onChangeText={text => onChange({name: 'email', text})}
+            rounded
           />
           <Input
             placeholder="Phone Number"
             onChangeText={text => onChange({name: 'phoneNumber', text})}
+            rounded
           />
           <Input
             placeholder="Password"
             onChangeText={text => onChange({name: 'password', text})}
+            rounded
           />
         </View>
         <Button style={{marginTop: height(5)}} onPress={handleRegister}>Sign Up</Button>

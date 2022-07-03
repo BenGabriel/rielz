@@ -75,7 +75,6 @@ const Profile = ({navigation}) => {
       <Button
         style={{
           marginTop: height(4),
-          backgroundColor: '#59534d',
         }}
         onPress={() => navigation.navigate('EditProfile')}>
         Edit Profile

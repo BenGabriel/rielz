@@ -12,7 +12,7 @@ xmlns:tools="http://schemas.android.com/tools"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
-      android:theme="@style/BootTheme"
+      android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true"
       android:requestLegacyExternalStorage="true"
       tools:targetApi="28">
@@ -22,6 +22,7 @@ xmlns:tools="http://schemas.android.com/tools"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
         android:exported="true"
+        android:theme="@style/Theme.App.SplashScreen"
         android:screenOrientation="portrait"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
@@ -31,6 +32,6 @@ xmlns:tools="http://schemas.android.com/tools"
       </activity>
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAKmiAgVQfrPVA_LSqxwyXkoSjFwi3IOzc" />
+        android:value="AIzaSyCGPY_hsHcarYRmtuyvZCTOyoRWGN7-JGA" />
     </application>
 </manifest>

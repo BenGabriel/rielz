@@ -48,7 +48,7 @@ const MapStackScreen = () => {
 const ProfileStackScreen = () => {
   return (
     <ProfileStack.Navigator screenOptions={{headerShown: false}}>
-      <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen name="UserProfile" component={Profile} />
       <ProfileStack.Screen name="EditProfile" component={EditProfile} />
       <ProfileStack.Screen name="OwnerDashboard" component={UserHome} />
       <ProfileStack.Screen name="AddHouse" component={Add} />

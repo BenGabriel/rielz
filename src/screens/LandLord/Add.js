@@ -8,15 +8,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Colors, height, width} from '../../helper/Index';
+import {height, width} from '../../helper/Index';
 import Location from '../../components/Location';
 import Picker from '../../components/Picker';
 import Styles from '../../helper/Styles';
 // import ImagePicker from 'react-native-image-crop-picker';
-import {NigeriaState} from '../../common/NigeriaState';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Button from '../../components/Button';
 import EditScreensContainer from '../../components/EditScreensContainer';
+import Typography from '../../components/Typography';
+import Input from '../../components/Input';
 
 const Add = ({navigation}) => {
   const [houseType, setHouseType] = useState('');
@@ -31,10 +32,10 @@ const Add = ({navigation}) => {
     rooms: '',
     bathroom: '',
     price: '',
-    space
+    space,
   });
 
-  const {description, rooms, bathroom, price, space} = houseDetails;
+  const {space} = houseDetails;
 
   const types = [
     {
@@ -80,6 +81,8 @@ const Add = ({navigation}) => {
     setImages(newImage);
   };
 
+  console.log(state, 'state');
+
   return (
     <EditScreensContainer navigation={navigation} title="Add House">
       <Picker
@@ -88,38 +91,30 @@ const Add = ({navigation}) => {
         value={houseType}
         setValue={setHouseType}
       />
-      <View style={{...styles.inputContainer, marginBottom: height(3)}}>
-        <Text
-          style={{
-            ...Styles.text('#333', 1.8, true),
-            marginBottom: height(1),
-          }}>
-          Address
-        </Text>
-        <TextInput
-          value={address}
-          style={styles.input}
+      <View style={styles.inputContainer}>
+        <Typography
+          text="Address"
+          color="#333"
+          size={1.8}
+          bold
+          style={styles.text}
+        />
+        <Input
           onFocus={() => setDisplay(true)}
           onChangeText={() => setDisplay(true)}
+          value={address}
         />
       </View>
-      <Picker
-        placeholder="State"
-        item={NigeriaState}
-        value={state}
-        setValue={setState}
-      />
       <View style={styles.inputContainer}>
-        <Text
-          style={{
-            ...Styles.text('#333', 1.8, true),
-            marginBottom: height(1),
-          }}>
-          Description
-        </Text>
-        <TextInput
-          value={description}
-          multiline={true}
+        <Typography
+          text="Description"
+          color="#333"
+          size={1.8}
+          bold
+          style={styles.text}
+        />
+        <Input
+          multiline
           style={styles.description}
           onChangeText={text =>
             setHouseDetails({...houseDetails, description: text})
@@ -133,51 +128,45 @@ const Add = ({navigation}) => {
           justifyContent: 'space-between',
         }}>
         <View style={{...styles.inputContainer, width: '30%'}}>
-          <Text
-            style={{
-              ...Styles.text('#333', 1.8, true),
-              marginBottom: height(1),
-            }}>
-            No. of rooms
-          </Text>
-          <TextInput
-            value={rooms}
-            style={styles.input}
-            keyboardType="numeric"
+          <Typography
+            text="No. of rooms"
+            color="#333"
+            size={1.8}
+            bold
+            style={styles.text}
+          />
+          <Input
+            numeric
             onChangeText={text =>
               setHouseDetails({...houseDetails, rooms: text})
             }
           />
         </View>
         <View style={{...styles.inputContainer, width: '30%'}}>
-          <Text
-            style={{
-              ...Styles.text('#333', 1.8, true),
-              marginBottom: height(1),
-            }}>
-            No. of Bathrooms
-          </Text>
-          <TextInput
-            value={bathroom}
-            style={styles.input}
-            keyboardType="numeric"
+          <Typography
+            text="No. of Bathrooms"
+            color="#333"
+            size={1.8}
+            bold
+            style={styles.text}
+          />
+          <Input
+            numeric
             onChangeText={text =>
               setHouseDetails({...houseDetails, bathroom: text})
             }
           />
         </View>
         <View style={{...styles.inputContainer, width: '30%'}}>
-          <Text
-            style={{
-              ...Styles.text('#333', 1.8, true),
-              marginBottom: height(1),
-            }}>
-            Available Space
-          </Text>
-          <TextInput
-            value={space}
-            style={styles.input}
-            keyboardType="numeric"
+          <Typography
+            text="Available Space"
+            color="#333"
+            size={1.8}
+            bold
+            style={styles.text}
+          />
+          <Input
+            numeric
             onChangeText={text =>
               setHouseDetails({...houseDetails, space: text})
             }
@@ -186,28 +175,26 @@ const Add = ({navigation}) => {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text
-          style={{
-            ...Styles.text('#333', 1.8, true),
-            marginBottom: height(1),
-          }}>
-          Price
-        </Text>
-        <TextInput
-          value={price}
-          style={styles.input}
-          keyboardType="numeric"
+        <Typography
+          text="Price"
+          color="#333"
+          size={1.8}
+          bold
+          style={styles.text}
+        />
+        <Input
+          numeric
           onChangeText={text => setHouseDetails({...houseDetails, price: text})}
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text
-          style={{
-            ...Styles.text('#333', 1.8, true),
-            marginBottom: height(1),
-          }}>
-          Gallery
-        </Text>
+        <Typography
+          text="Gallery"
+          color="#333"
+          size={1.8}
+          bold
+          style={styles.text}
+        />
         <ScrollView
           horizontal
           style={{
@@ -216,21 +203,14 @@ const Add = ({navigation}) => {
           <TouchableOpacity
             style={styles.addimage}
             onPress={() => getImageFromGallery()}>
-            <Text style={Styles.text('#c4c4c4', 5, false)}>+</Text>
+            <Typography text="+" color="#c4c4c4" size={5} />
           </TouchableOpacity>
           {images.length !== 0 &&
             images.map((imageDet, index) => (
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: width(22),
-                  height: height(10),
-                  backgroundColor: '#F7F7F7',
-                  marginLeft: 10,
-                }}
+                style={styles.ImageContainer}
                 onPress={() => filterImage(imageDet)}>
                 <Image
                   source={{uri: imageDet.uri}}
@@ -248,7 +228,6 @@ const Add = ({navigation}) => {
         style={{
           marginVertical: height(6),
           marginTop: height(4),
-          backgroundColor: Colors.brown,
         }}>
         Add House
       </Button>
@@ -258,6 +237,7 @@ const Add = ({navigation}) => {
         setValue={setAddress}
         setLat={setLat}
         setLng={setLng}
+        setState={setState}
       />
     </EditScreensContainer>
   );
@@ -278,16 +258,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     elevation: 1,
   },
-  input: {
-    ...Styles.text('#333', 1.6, false),
-    borderWidth: 0.5,
-    borderColor: '#333',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    height: 46,
-  },
   inputContainer: {
-    marginTop: height(2),
+    marginTop: height(1.5),
   },
   secContainer: {
     flex: 1,
@@ -309,12 +281,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   description: {
-    ...Styles.text('#333', 1.6, false),
-    borderWidth: 0.5,
-    borderColor: '#333',
-    borderRadius: 10,
-    height: 70,
+    height: 80,
     textAlignVertical: 'top',
-    paddingHorizontal: 10,
+  },
+  ImageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width(22),
+    height: height(10),
+    backgroundColor: '#F7F7F7',
+    marginLeft: 10,
+  },
+  text: {
+    marginBottom: height(1),
   },
 });

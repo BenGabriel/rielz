@@ -1,11 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {font, height, width} from '../helper/Index';
+import {font, height} from '../helper/Index';
 
 const Styles = StyleSheet.create({
   text: (color, size, value) => ({
     color,
     fontSize: font(size),
-    fontFamily: value ? 'DMSans-Bold' : 'DMSans-Regular',
+    fontWeight: value ? 'bold' : '400',
   }),
   pickerContainer: {
     width: '100%',
@@ -17,7 +17,6 @@ const Styles = StyleSheet.create({
     marginBottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
   flexRowSpaceCenter: {
     flexDirection: 'row',

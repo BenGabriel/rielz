@@ -9,7 +9,7 @@ const Home = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Typography text="Rielz" style={styles.rielzText} size={3} bold />
+      <Typography text="Rielz" style={styles.rielzText} size={2.4} bold />
       <View style={[styles.secContainer]}>
         <FlatList
           data={data}
@@ -32,18 +32,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   rielzText: {
-    width: '30%',
+    width: '20%',
     textAlign: 'center',
     borderRadius: 20,
     elevation: 2,
     backgroundColor: '#fff',
     marginTop: height(2),
     marginLeft: 20,
-    padding: 5,
+    padding: 7,
   },
   secContainer: {
     width: width(100),
     padding: height(1.5),
     paddingTop: height(2),
+    paddingBottom: height(4)
   },
 });

@@ -22,4 +22,4 @@ const snackHandler = (text, type) => {
   });
 };
 
-export {height, width, font, Colours, snackHandler};
+export {height, width, font, Colors, snackHandler};

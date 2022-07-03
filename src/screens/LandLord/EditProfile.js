@@ -1,22 +1,32 @@
-import {StyleSheet, Text, TextInput} from 'react-native';
-import React from 'react';
-import {Colors, height} from '../../helper/Index';
+import {StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {height} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import EditScreensContainer from '../../components/EditScreensContainer';
 import Button from '../../components/Button';
+import Input from '../../components/Input';
 
 const EditProfile = ({navigation}) => {
+  const [userProfile, setUserProfile] = useState({});
+  const onChange = useCallback(
+    ({name, value}) => {
+      setUserProfile({...userProfile, [name]: value});
+    },
+    [userProfile],
+  );
+
   return (
     <EditScreensContainer navigation={navigation} title="Edit Profile">
-      <Text style={{...styles.text, marginTop: height(4)}}>First Name</Text>
-      <TextInput value="" style={styles.input} />
-      <Text style={styles.text}>Last Name</Text>
-      <TextInput value="" style={styles.input} />
-      <Text style={styles.text}>Phone</Text>
-      <TextInput value="" style={styles.input} />
+      <View style={{marginTop: height(2), width: '90%', alignSelf: 'center'}}>
+        <Text style={styles.text}>First Name</Text>
+        <Input onChangeText={value => onChange({name: 'firstName', value})} />
+        <Text style={styles.text}>Last Name</Text>
+        <Input onChangeText={value => onChange({name: 'lastName', value})} />
+        <Text style={styles.text}>Phone</Text>
+        <Input onChangeText={value => onChange({name: 'phone', value})} numeric />
+      </View>
       <Button
         style={{
-          backgroundColor: Colors.brown,
           marginTop: height(5),
         }}>
         Edit
@@ -28,17 +38,9 @@ const EditProfile = ({navigation}) => {
 export default EditProfile;
 
 const styles = StyleSheet.create({
-  input: {
-    width: '90%',
-    borderWidth: 1,
-    borderColor: '#c4c4c4',
-    height: 46,
-    borderRadius: 10,
-    marginVertical: height(2),
-    alignSelf: 'center',
-  },
   text: {
     ...Styles.text('#333', 1.8, true),
-    marginLeft: height(2),
+    marginLeft: height(1),
+    marginTop: height(3),
   },
 });

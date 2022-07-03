@@ -29,6 +29,7 @@ const Picker = props => {
           name="chevron-down"
           color={Colors.grey}
           size={width(6)}
+          style={{marginTop: -5}}
         />
       </TouchableOpacity>
       <Modal

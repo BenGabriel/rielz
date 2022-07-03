@@ -1,22 +1,19 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import RNBootSplash from 'react-native-bootsplash';
 import TopTabNavigator from './src/routes/TopTabNavigator';
 import StackNavigator from './src/routes/StackNavigator';
 import Geolocation from 'react-native-geolocation-service';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {PermissionsAndroid, Platform} from 'react-native';
-// import Styles from './src/helper/Styles';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 
 const Stack = createSharedElementStackNavigator();
 
 const App = () => {
   useEffect(() => {
     requestPermissions();
-    setTimeout(() => {
-      RNBootSplash.hide({fade: true});
-    }, 2000);
-  });
+  }, []);
 
   async function requestPermissions() {
     if (Platform.OS === 'ios') {
@@ -36,21 +33,17 @@ const App = () => {
     }
   }
   return (
+    // <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen
-          name="Details"
-          component={StackNavigator}
-          options={{
-            headerShown: false,
-          }}
-        />
+        <Stack.Screen name="Details" component={StackNavigator} />
         <Stack.Screen name="Stack" component={TopTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
+    // </Provider>
   );
 };
 

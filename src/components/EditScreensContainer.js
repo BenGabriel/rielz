@@ -1,12 +1,12 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { Colors, height, width } from '../helper/Index';
+import {Colors, height, width} from '../helper/Index';
 import Styles from '../helper/Styles';
 import {Ionicons} from '../common/Icons';
 
 const EditScreensContainer = props => {
   return (
-    <View style={{flex: 1, backgroundColor: Colors.brown}}>
+    <View style={{flex: 1, backgroundColor: Colors.primary}}>
       <View style={styles.navContainer}>
         <Ionicons
           name="chevron-back-sharp"
@@ -25,7 +25,8 @@ const EditScreensContainer = props => {
       </View>
       <ScrollView
         style={styles.secContainer}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled">
         {props.children}
       </ScrollView>
     </View>
@@ -52,8 +53,8 @@ const styles = StyleSheet.create({
     marginTop: height(3),
     backgroundColor: '#fff',
     padding: height(2),
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
     paddingTop: height(3),
     paddingBottom: height(10),
   },

@@ -167,7 +167,6 @@ const EditHouse = ({navigation}) => {
         style={{
           marginVertical: height(6),
           marginTop: height(4),
-          backgroundColor: Colors.brown,
         }}>
         Edit House
       </Button>
