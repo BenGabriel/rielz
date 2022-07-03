@@ -5,9 +5,7 @@ import {
 import {RFPercentage as font} from 'react-native-responsive-fontsize';
 import Snackbar from 'react-native-snackbar';
 
-export {height, width, font};
-
-export const Colors = {
+const Colors = {
   primary: '#004aad',
   white: '#fff',
   black: '#333',
@@ -16,10 +14,12 @@ export const Colors = {
   brown: '#59534d',
 };
 
-export const snackHandler = (text, type) => {
+const snackHandler = (text, type) => {
   return Snackbar.show({
     backgroundColor: type === 'error' ? '#f00' : Colors.primary,
     text,
     duration: Snackbar.LENGTH_SHORT,
   });
 };
+
+export {height, width, font, Colours, snackHandler};
