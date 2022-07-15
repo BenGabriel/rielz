@@ -3,22 +3,19 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
-  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {height, width} from '../../helper/Index';
 import Location from '../../components/Location';
 import Picker from '../../components/Picker';
-import Styles from '../../helper/Styles';
 import ImagePicker from 'react-native-image-crop-picker';
-import {launchImageLibrary} from 'react-native-image-picker';
 import Button from '../../components/Button';
 import EditScreensContainer from '../../components/EditScreensContainer';
 import Typography from '../../components/Typography';
 import Input from '../../components/Input';
+import ImgToBase64 from 'react-native-image-base64';
+import mime from 'mime';
 
 const Add = ({navigation}) => {
   const [houseType, setHouseType] = useState('');
@@ -28,6 +25,8 @@ const Add = ({navigation}) => {
   const [lat, setLat] = useState('');
   const [lng, setLng] = useState('');
   const [images, setImages] = useState([]);
+  const [basedImages, setBasedImages] = useState([]);
+
   const [houseDetails, setHouseDetails] = useState({
     description: '',
     rooms: '',
@@ -56,16 +55,30 @@ const Add = ({navigation}) => {
   const getImageFromGallery = () => {
     ImagePicker.openPicker({
       multiple: true,
-    }).then(images => {
+      mediaType: 'photo',
+    }).then(async images => {
       console.log(images);
       if (images.length < 6) {
-        ToastAndroid.show('images must be more than 5');
         getImageFromGallery();
       } else {
         const newImages = images.slice(0, 6);
         setImages(newImages);
+        const bases = await convertToBase(newImages);
+        setBasedImages(bases)
+        console.log(bases, 'top');
       }
     });
+  };
+
+  const convertToBase = async array => {
+    let source = [];
+    for (let i = 0; i < array.length; i++) {
+      let image = array[i];
+      let type = mime.getType(image.path);
+      const base = await ImgToBase64.getBase64String(image.path);
+      source.push(`data:${type};base64,` + base);
+    }
+    return source;
   };
 
   // const getImageFromGallery = type => {
@@ -86,8 +99,6 @@ const Add = ({navigation}) => {
     const newImage = images.filter(e => e.fileSize !== value.fileSize);
     setImages(newImage);
   };
-
-  console.log(state, 'state');
 
   return (
     <EditScreensContainer navigation={navigation} title="Add House">
