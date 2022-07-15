@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {height, width} from '../../helper/Index';
 import HouseCard from '../../components/HouseCard';
 import Typography from '../../components/Typography';
+import {useDispatch, useSelector} from 'react-redux';
+import { fetchAllHouses, fetchAllUser, fetchLandlordHouses } from '../../redux/actions';
 
-const Home = ({navigation}) => {
+const Home = () => {
+  const dispatch = useDispatch();
+  const sate = useSelector(state => state.appSlice);
   const data = [...Array(12 - 1 + 1).keys()];
+
+  useEffect(() => {
+    dispatch(fetchAllUser())
+    dispatch(fetchAllHouses())
+    dispatch(fetchLandlordHouses())
+  }, []);
+
+  console.log(sate,"sate")
 
   return (
     <View style={styles.container}>
@@ -45,6 +57,6 @@ const styles = StyleSheet.create({
     width: width(100),
     padding: height(1.5),
     paddingTop: height(2),
-    paddingBottom: height(4)
+    paddingBottom: height(4),
   },
 });

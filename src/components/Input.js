@@ -1,7 +1,8 @@
-import {StyleSheet, TextInput} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
 import Styles from '../helper/Styles';
 import {height} from '../helper/Index';
+import {Ionicons} from '../common/Icons';
 
 const Input = ({
   placeholder,
@@ -12,24 +13,52 @@ const Input = ({
   value,
   numeric,
   multiline,
+  error,
+  secure,
 }) => {
+  const [secureText, setSecureText] = useState(true);
   return (
-    <TextInput
-      placeholder={placeholder}
-      value={value}
-      style={[
-        styles.input,
-        {...style},
-        {
+    <View style={{width: '100%'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          ...styles.input,
+
           borderRadius: rounded ? 50 : 10,
           paddingHorizontal: rounded ? height(2) : 10,
-        },
-      ]}
-      keyboardType={numeric ? 'numeric' : 'default'}
-      onChangeText={onChangeText}
-      onFocus={onFocus}
-      multiline={multiline}
-    />
+          borderColor: error ? 'red' : 'black',
+          justifyContent: 'space-between',
+        }}>
+        <TextInput
+          placeholder={placeholder}
+          value={value}
+          style={{width: secure ? '70%' : '100%', ...style}}
+          keyboardType={numeric ? 'numeric' : 'default'}
+          onChangeText={onChangeText}
+          onFocus={onFocus}
+          multiline={multiline}
+          secureTextEntry={secure ? secureText : false}
+        />
+        {secure && (
+          <Ionicons
+            name={secureText ? 'eye-off-sharp' : 'eye'}
+            size={20}
+            onPress={() => setSecureText(!secureText)}
+          />
+        )}
+      </View>
+      {error && (
+        <Text
+          style={{
+            ...Styles.text('red', 1.3, false),
+            marginLeft: 10,
+            marginBottom: 5,
+          }}>
+          {error}
+        </Text>
+      )}
+    </View>
   );
 };
 

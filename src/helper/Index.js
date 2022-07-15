@@ -4,6 +4,7 @@ import {
 } from 'react-native-responsive-screen';
 import {RFPercentage as font} from 'react-native-responsive-fontsize';
 import Snackbar from 'react-native-snackbar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Colors = {
   primary: '#004aad',
@@ -22,4 +23,36 @@ const snackHandler = (text, type) => {
   });
 };
 
-export {height, width, font, Colors, snackHandler};
+const emailRegex = RegExp(
+  /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+);
+
+const setSession = async data => {
+  try {
+    await AsyncStorage.setItem('SESSION', data);
+  } catch (err) {
+    console.log('something happened', err);
+  }
+};
+
+const getSession = async () => {
+  try {
+    const data = await AsyncStorage.getItem('SESSION');
+    return data;
+  } catch (err) {
+    console.log('something happened', err);
+  }
+};
+
+const phoneRegex = RegExp(/^\s*-?[0-9]{1,11}\s*$/);
+export {
+  height,
+  width,
+  font,
+  Colors,
+  snackHandler,
+  emailRegex,
+  phoneRegex,
+  setSession,
+  getSession,
+};

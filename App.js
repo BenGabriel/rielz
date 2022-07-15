@@ -33,17 +33,17 @@ const App = () => {
     }
   }
   return (
-    // <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Details" component={StackNavigator} />
-        <Stack.Screen name="Stack" component={TopTabNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
-    // </Provider>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="Details" component={StackNavigator} />
+          <Stack.Screen name="Stack" component={TopTabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

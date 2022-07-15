@@ -7,26 +7,88 @@ import {
   Text,
   View,
 } from 'react-native';
-import {Colors, height, width, snackHandler} from '../../helper/Index';
+import {
+  Colors,
+  height,
+  width,
+  snackHandler,
+  emailRegex,
+  getSession,
+  setSession,
+} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Typography from '../../components/Typography';
+import axios from 'axios';
+import api from '../../helper/endpoint.json';
+import {useDispatch} from 'react-redux';
+import {
+  fetchAllHouses,
+  fetchAllUser,
+  fetchLandlordHouses,
+} from '../../redux/actions';
 
 const Login = ({navigation}) => {
+  const dispatch = useDispatch();
   const [loginDetails, setLoginDetails] = useState({});
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  });
+  const [loading, setLoading] = useState(false);
 
   const navigateToRegister = () => {
     navigation.navigate('Register');
   };
 
   const onChange = ({name, value}) => {
+    setErrors({email: '', password: ''});
     setLoginDetails({...loginDetails, [name]: value});
   };
 
-  const handleLogin = () => {
-    console.log(loginDetails);
-    navigation.replace('Stack');
+  const handleLogin = async () => {
+    if (!emailRegex.test(loginDetails.email))
+      return setErrors({...errors, email: 'Enter a valid email'});
+    if (loginDetails.password === undefined || loginDetails.password.length < 7)
+      return setErrors({
+        ...errors,
+        password: 'Password must be greater than 7',
+      });
+
+    setLoading(true);
+    try {
+      const {data} = await axios.post(
+        `${api.url}${api.authenticate.login}`,
+        {
+          email: loginDetails.email,
+          password: loginDetails.password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      console.log(data);
+      setSession(data.token);
+      setLoading(false);
+      dispatch(fetchAllUser());
+      dispatch(fetchAllHouses());
+      dispatch(fetchLandlordHouses());
+      navigation.replace('Stack');
+    } catch (error) {
+      setLoading(false);
+      console.log(error.response);
+      if (error.response.data.message !== undefined) {
+        snackHandler(`${error.response.data.message}`, 'error');
+      } else {
+        snackHandler('Login failed', 'error');
+      }
+    }
+    // console.log(loginDetails);
+    // navigation.replace('Stack');
   };
 
   return (
@@ -58,14 +120,21 @@ const Login = ({navigation}) => {
             placeholder="Email"
             onChangeText={value => onChange({name: 'email', value})}
             rounded
+            error={errors.email}
           />
           <Input
             placeholder="Password"
             onChangeText={value => onChange({name: 'password', value})}
             rounded
+            error={errors.password}
+            secure
           />
         </View>
-        <Button style={{marginTop: height(5)}} onPress={handleLogin}>
+        <Button
+          style={{marginTop: height(5)}}
+          onPress={handleLogin}
+          load={loading}
+          disabled={loading}>
           Login
         </Button>
         <Text

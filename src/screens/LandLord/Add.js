@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,7 +13,7 @@ import {height, width} from '../../helper/Index';
 import Location from '../../components/Location';
 import Picker from '../../components/Picker';
 import Styles from '../../helper/Styles';
-// import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Button from '../../components/Button';
 import EditScreensContainer from '../../components/EditScreensContainer';
@@ -24,8 +25,8 @@ const Add = ({navigation}) => {
   const [state, setState] = useState('');
   const [display, setDisplay] = useState(false);
   const [address, setAddress] = useState('');
-  const [lat, setLat] = useState();
-  const [lng, setLng] = useState();
+  const [lat, setLat] = useState('');
+  const [lng, setLng] = useState('');
   const [images, setImages] = useState([]);
   const [houseDetails, setHouseDetails] = useState({
     description: '',
@@ -52,29 +53,34 @@ const Add = ({navigation}) => {
     },
   ];
 
-  // const getImageFromGallery = () => {
-  //   ImagePicker.openPicker({
-  //     multiple: true,
-  //   }).then(images => {
-  //     console.log(images);
-  //     const newImages = images.slice(0, 6);
-  //     setImages(newImages);
-  //   });
-  // };
-
-  const getImageFromGallery = type => {
-    const options = {
-      selectionLimit: 0,
-    };
-    if (images.length === 6) return alert('You cannot add more images');
-    launchImageLibrary(options, response => {
-      console.log('hi');
-      if (response.assets) {
-        console.log(response);
-        setImages([...images, ...response.assets]);
+  const getImageFromGallery = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+    }).then(images => {
+      console.log(images);
+      if (images.length < 6) {
+        ToastAndroid.show('images must be more than 5');
+        getImageFromGallery();
+      } else {
+        const newImages = images.slice(0, 6);
+        setImages(newImages);
       }
     });
   };
+
+  // const getImageFromGallery = type => {
+  //   const options = {
+  //     selectionLimit: 0,
+  //   };
+  //   if (images.length === 6) return alert('You cannot add more images');
+  //   launchImageLibrary(options, response => {
+  //     console.log('hi');
+  //     if (response.assets) {
+  //       console.log(response);
+  //       setImages([...images, ...response.assets]);
+  //     }
+  //   });
+  // };
 
   const filterImage = value => {
     const newImage = images.filter(e => e.fileSize !== value.fileSize);
@@ -189,7 +195,7 @@ const Add = ({navigation}) => {
       </View>
       <View style={styles.inputContainer}>
         <Typography
-          text="Gallery"
+          text="Gallery 5+"
           color="#333"
           size={1.8}
           bold
@@ -199,7 +205,8 @@ const Add = ({navigation}) => {
           horizontal
           style={{
             width: '100%',
-          }}>
+          }}
+          showsHorizontalScrollIndicator={false}>
           <TouchableOpacity
             style={styles.addimage}
             onPress={() => getImageFromGallery()}>
@@ -213,7 +220,7 @@ const Add = ({navigation}) => {
                 style={styles.ImageContainer}
                 onPress={() => filterImage(imageDet)}>
                 <Image
-                  source={{uri: imageDet.uri}}
+                  source={{uri: imageDet.path}}
                   style={{
                     width: '100%',
                     height: '100%',

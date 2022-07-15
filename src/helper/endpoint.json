@@ -1,0 +1,15 @@
+{
+  "url": "https://rielzapp.herokuapp.com/",
+  "authenticate": {
+    "login": "login",
+    "signup": "register"
+  },
+  "get": {
+    "houses": "api/houses",
+    "getLandlord": "api/houses/landlord",
+    "user":"api/users"
+  },
+  "post": {
+    "houses": "api/houses"
+  }
+}
