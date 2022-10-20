@@ -60,9 +60,9 @@ const EditProfile = ({navigation}) => {
       await axios.put(
         `${api.url}${api.get.user}/${user.ID}`,
         {
-          firstname: userProfile.firstName,
-          lastname: userProfile.lastName,
-          phonenumber: userProfile.phone,
+          firstname: userProfile.firstName.trimEnd(),
+          lastname: userProfile.lastName.trimEnd(),
+          phonenumber: userProfile.phone.trimEnd(),
         },
         {
           headers: {

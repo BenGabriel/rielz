@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, Image, StyleSheet, Text, View, Animated} from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
-import {Colors, convertTocurrency, height, width} from '../../helper/Index';
+import {
+  Colors,
+  convertTocurrency,
+  getUser,
+  height,
+  width,
+} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import {Ionicons, FontAwesome5} from '../../common/Icons';
 import api from '../../helper/endpoint.json';
@@ -11,19 +17,22 @@ const HouseDetails = ({navigation, route}) => {
   const {item, details} = route.params;
 
   const [landLord, setLandLord] = useState(null);
+  const [currentUserID, setCurrentUserID] = useState('');
 
   const getLandlord = async () => {
     try {
+      const user = await getUser();
       const {data} = await axios.get(
         `${api.url}${api.get.user}/${details.user_id}`,
       );
       console.log(data);
+      setCurrentUserID(user.ID);
       setLandLord({
         ID: data.ID,
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
-        phonenumber: data.phonenumber
+        phonenumber: data.phonenumber,
       });
     } catch (error) {
       console.log(error);
@@ -103,18 +112,20 @@ const HouseDetails = ({navigation, route}) => {
             <Text style={Styles.text(Colors.black, 1.8, true)}>
               {details.house_type}
             </Text>
-            <Text
-              style={{
-                ...Styles.text('blue', 1.8, true),
-                textDecorationLine: 'underline',
-              }}
-              onPress={() =>
-                navigation.navigate('LandlordDetails', {
-                  landLord,
-                })
-              }>
-              {landLord?.firstname}
-            </Text>
+            {currentUserID !== landLord?.ID && (
+              <Text
+                style={{
+                  ...Styles.text('blue', 1.8, true),
+                  textDecorationLine: 'underline',
+                }}
+                onPress={() =>
+                  navigation.navigate('LandlordDetails', {
+                    landLord,
+                  })
+                }>
+                {landLord?.firstname}
+              </Text>
+            )}
           </View>
           <Text style={Styles.text(Colors.grey, 1.6, false)}>
             {details.location}
@@ -130,6 +141,12 @@ const HouseDetails = ({navigation, route}) => {
               <FontAwesome5 name="bath" size={15} color={Colors.grey} />
               <Text style={Styles.text(Colors.grey, 1.5, false)}>
                 {details.bathrooms}
+              </Text>
+            </View>
+            <View style={styles.detailsIcons}>
+              <Ionicons name="layers" size={15} color={Colors.grey} />
+              <Text style={Styles.text(Colors.grey, 1.5, false)}>
+                {details.available_rooms}
               </Text>
             </View>
             <Text

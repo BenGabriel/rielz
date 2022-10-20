@@ -1,4 +1,5 @@
-import React from 'react';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,17 +8,49 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
 import {Ionicons, FontAwesome5} from '../../common/Icons';
 import Typography from '../../components/Typography';
-import {Colors, convertTocurrency, height, width} from '../../helper/Index';
+import {
+  Colors,
+  convertTocurrency,
+  getSession,
+  height,
+  width,
+} from '../../helper/Index';
 import Styles from '../../helper/Styles';
+import api from '../../helper/endpoint.json';
 
 const MyHouseDetails = ({navigation, route}) => {
   const {index, details} = route.params;
+  const [tenants, setTenants] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  console.log(details);
+  const getHouse = async () => {
+    const token = await getSession();
+    setLoading(true);
+    try {
+      const {data} = await axios.get(
+        `${api.url}${api.get.houses}/${details.ID}`,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        },
+      );
+      setLoading(false);
+      setTenants(data.tenants);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getHouse();
+  }, []);
 
   const data = [...Array(7 - 1 + 1).keys()];
 
@@ -43,7 +76,14 @@ const MyHouseDetails = ({navigation, route}) => {
       </View>
       <ScrollView
         style={{padding: 10, paddingRight: height(0)}}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            onRefresh={getHouse}
+            refreshing={loading}
+            colors={['blue', 'red', 'green', '#ffbf00']}
+          />
+        }>
         <Text style={Styles.text('#333', 2, true)}>{details.location}</Text>
         <Text style={{...Styles.text('#999', 1.8, true), marginTop: 8}}>
           {details.house_type}
@@ -84,7 +124,7 @@ const MyHouseDetails = ({navigation, route}) => {
             <Text style={Styles.text('#333', 1.6, true)}>{details.state}</Text>
 
             <Ionicons
-              name="build"
+              name="layers"
               size={26}
               color={Colors.brown}
               style={styles.secIcons}
@@ -145,7 +185,9 @@ const MyHouseDetails = ({navigation, route}) => {
             marginBottom: 30,
           }}>
           <Text style={Styles.text(Colors.grey, 1.7, false)}>Price</Text>
-          <Text style={Styles.text(Colors.black, 2, true)}>₦{convertTocurrency(details.price)}</Text>
+          <Text style={Styles.text(Colors.black, 2, true)}>
+            ₦{convertTocurrency(details.price)}
+          </Text>
         </View>
         <View style={{paddingRight: height(2), marginBottom: height(2)}}>
           <View
@@ -156,20 +198,28 @@ const MyHouseDetails = ({navigation, route}) => {
               marginBottom: height(2),
             }}>
             <Text style={Styles.text(Colors.black, 1.8, true)}>Tenants</Text>
-            <Text
-              style={{...Styles.text('blue', 1.8, true), marginRight: 16}}
-              onPress={() => navigation.navigate('AddTenant')}>
-              Add
-            </Text>
+            {tenants.length >= details.available_rooms ? null : (
+              <Text
+                style={{...Styles.text('blue', 1.8, true), marginRight: 16}}
+                onPress={() =>
+                  navigation.navigate('AddTenant', {
+                    id: details.ID,
+                  })
+                }>
+                Add
+              </Text>
+            )}
           </View>
-          {data.map(i => (
-            <View key={i} style={styles.eachTenant}>
+
+          {tenants?.map(i => (
+            <View key={i.ID} style={styles.eachTenant}>
               <View style={styles.tenantInitial}>
                 <Text
                   style={{
-                    ...Styles.text(Colors.white, 2.5, true),
+                    ...Styles.text(Colors.white, 1.8, true),
                   }}>
-                  P
+                  {i.firstname.slice(0, 1)}
+                  {i.lastname.slice(0, 1)}
                 </Text>
               </View>
               <View
@@ -177,19 +227,18 @@ const MyHouseDetails = ({navigation, route}) => {
                   marginLeft: height(2),
                 }}>
                 <Typography
-                  text="paul breakthrough onyebuchi odinaka"
+                  text={`${i.firstname} ${i.lastname}`}
                   bold
                   color={Colors.black}
                   size={2}
                 />
                 <Typography
-                  text="simeongabriel175@gmai.com.ng.bamidele"
-                  bold
+                  text={i.email}
                   color={Colors.black}
                   style={{
-                    marginTop: 5,
+                    marginTop: 2,
                   }}
-                  size={1.8}
+                  size={1.5}
                 />
               </View>
             </View>

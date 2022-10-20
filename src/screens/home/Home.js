@@ -1,20 +1,28 @@
 import React, {useEffect} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
 import {height, width} from '../../helper/Index';
 import HouseCard from '../../components/HouseCard';
 import Typography from '../../components/Typography';
 import {useDispatch, useSelector} from 'react-redux';
-import { fetchAllHouses, fetchLandlordHouses, fetchUser } from '../../redux/actions';
+import {
+  fetchAllHouses,
+  fetchLandlordHouses,
+  fetchUser,
+} from '../../redux/actions';
 
 const Home = () => {
   const dispatch = useDispatch();
   const state = useSelector(state => state.houseSlice);
   const data = [...Array(12 - 1 + 1).keys()];
 
+  const loadAll = () => {
+    dispatch(fetchUser());
+    dispatch(fetchAllHouses());
+    dispatch(fetchLandlordHouses());
+  };
+
   useEffect(() => {
-    dispatch(fetchUser())
-    dispatch(fetchAllHouses())
-    dispatch(fetchLandlordHouses())
+    loadAll();
   }, []);
 
   return (
@@ -28,6 +36,13 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           numColumns={2}
           ListFooterComponent={() => <View style={{padding: 35}} />}
+          refreshControl={
+            <RefreshControl
+              onRefresh={loadAll}
+              refreshing={state.loading}
+              colors={['blue', 'red', 'green', '#ffbf00']}
+            />
+          }
         />
       </View>
     </View>

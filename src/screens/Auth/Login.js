@@ -61,8 +61,8 @@ const Login = ({navigation}) => {
       const {data} = await axios.post(
         `${api.url}${api.authenticate.login}`,
         {
-          email: loginDetails.email,
-          password: loginDetails.password,
+          email: loginDetails.email.trimEnd(),
+          password: loginDetails.password.trimEnd(),
         },
         {
           headers: {
@@ -70,6 +70,8 @@ const Login = ({navigation}) => {
           },
         },
       );
+
+      console.log(data)
 
       setSession(data.token);
       setUser(JSON.stringify(data.user))

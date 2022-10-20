@@ -80,11 +80,11 @@ const Register = ({navigation}) => {
       await axios.post(
         `${api.url}${api.authenticate.signup}`,
         {
-          email: registerDetails.email,
-          lastname: registerDetails.lastname,
-          firstname: registerDetails.firstname,
-          phonenumber: registerDetails.phonenumber,
-          password: registerDetails.password,
+          email: registerDetails.email.trimEnd(),
+          lastname: registerDetails.lastname.trimEnd(),
+          firstname: registerDetails.firstname.trimEnd(),
+          phonenumber: registerDetails.phonenumber.trimEnd(),
+          password: registerDetails.password.trimEnd(),
         },
         {
           headers: {

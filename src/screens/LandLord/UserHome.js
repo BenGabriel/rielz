@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Animated,
   Dimensions,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -23,8 +24,6 @@ const item_height = item_width * 1.5;
 const UserHome = ({navigation}) => {
   const state = useSelector(state => state.houseSlice);
   const dispatch = useDispatch();
-
-  console.log(state);
 
   useEffect(() => {
     dispatch(fetchLandlordHouses);
@@ -112,7 +111,14 @@ const UserHome = ({navigation}) => {
     <ScrollView
       style={{flex: 1, padding: 10}}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{flex: 1}}>
+      contentContainerStyle={{flex: 1}}
+      refreshControl={
+        <RefreshControl
+          onRefresh={() => dispatch(fetchLandlordHouses())}
+          refreshing={state.loading}
+          colors={['blue', 'red', 'green', '#ffbf00']}
+        />
+      }>
       <Ionicons
         name="chevron-back-sharp"
         style={styles.icon}
