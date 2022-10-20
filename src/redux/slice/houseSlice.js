@@ -1,25 +1,22 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllHouses, fetchAllUser, fetchLandlordHouses} from './actions';
+import {
+  fetchAllHouses,
+  fetchLandlordHouses,
+} from '../actions';
 
 const initialState = {
-  users: [],
   houses: [],
-  landlordHouses:[],
+  landlordHouses: [],
   loading: false,
 };
 
-export const appSlice = createSlice({
-  name: 'app',
+export const houseSlice = createSlice({
+  name: 'house',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchAllUser.pending, state => {
-        state.loading = true;
-      })
-      .addCase(fetchAllUser.fulfilled, (state, action) => {
-        (state.loading = false), (state.users = action.payload);
-      })
+
       .addCase(fetchAllHouses.pending, state => {
         state.loading = true;
       })
@@ -31,8 +28,8 @@ export const appSlice = createSlice({
       })
       .addCase(fetchLandlordHouses.fulfilled, (state, action) => {
         (state.loading = false), (state.landlordHouses = action.payload);
-      })
+      });
   },
 });
 
-export default appSlice.reducer;
+export default houseSlice.reducer;

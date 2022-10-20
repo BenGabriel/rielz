@@ -18,10 +18,19 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  flexRowSpaceCenter: {
+  flexRowCenterAll: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  flexRowSpaceCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  flexRowSpace: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

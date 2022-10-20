@@ -1,11 +1,27 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {getSession} from '../helper/Index';
+import {getSession, getUser} from '../helper/Index';
 import axios from 'axios';
 import api from '../helper/endpoint.json';
 
-export const fetchAllUser = createAsyncThunk('fetchUsers', async () => {
+export const fetchAllUser = createAsyncThunk('fetchAllUsers', async () => {
   const token = await getSession();
   const res = await axios.get(`${api.url}${api.get.user}`, {
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
+  if (res.status === 200) {
+    return res.data;
+  } else {
+    console.log(res.data, 'error');
+  }
+});
+
+//get singleUser
+export const fetchUser = createAsyncThunk('fetchUser', async () => {
+  const user = await getUser();
+  const token = await getSession();
+  const res = await axios.get(`${api.url}${api.get.user}/${user.ID}`, {
     headers: {
       Authorization: `${token}`,
     },

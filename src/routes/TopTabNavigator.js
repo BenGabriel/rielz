@@ -1,5 +1,5 @@
 import React from 'react';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/home/Home';
 import Map from '../screens/maps/Map';
 import Search from '../screens/search/Search';
@@ -11,7 +11,7 @@ import EditProfile from '../screens/LandLord/EditProfile';
 import UserHome from '../screens/LandLord/UserHome';
 import Add from '../screens/LandLord/Add';
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
 const HomeStack = createSharedElementStackNavigator();
 const SearchStack = createSharedElementStackNavigator();
 const MapStack = createSharedElementStackNavigator();
@@ -68,7 +68,6 @@ const TopTabNavigator = ({navigation}) => {
         tabBarIndicatorStyle: {
           backgroundColor: 'white',
         },
-        swipeEnabled: false,
       }}>
       <Tab.Screen
         name="Home"

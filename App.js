@@ -43,6 +43,7 @@ const App = () => {
           <Stack.Screen name="Stack" component={TopTabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
+      {/* AIzaSyBe0id34NY__yLzir1MCkz0t-kWmj3GHEo */}
     </Provider>
   );
 };

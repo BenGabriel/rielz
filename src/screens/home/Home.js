@@ -4,20 +4,18 @@ import {height, width} from '../../helper/Index';
 import HouseCard from '../../components/HouseCard';
 import Typography from '../../components/Typography';
 import {useDispatch, useSelector} from 'react-redux';
-import { fetchAllHouses, fetchAllUser, fetchLandlordHouses } from '../../redux/actions';
+import { fetchAllHouses, fetchAllUser, fetchLandlordHouses, fetchUser } from '../../redux/actions';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const sate = useSelector(state => state.appSlice);
+  const state = useSelector(state => state.appSlice);
   const data = [...Array(12 - 1 + 1).keys()];
 
   useEffect(() => {
     dispatch(fetchAllUser())
+    dispatch(fetchUser())
     dispatch(fetchAllHouses())
-    dispatch(fetchLandlordHouses())
   }, []);
-
-  console.log(sate,"sate")
 
   return (
     <View style={styles.container}>

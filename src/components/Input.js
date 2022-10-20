@@ -15,6 +15,7 @@ const Input = ({
   multiline,
   error,
   secure,
+  maxLength
 }) => {
   const [secureText, setSecureText] = useState(true);
   return (
@@ -33,12 +34,14 @@ const Input = ({
         <TextInput
           placeholder={placeholder}
           value={value}
-          style={{width: secure ? '70%' : '100%', ...style}}
+          style={{width: secure ? '70%' : '100%', color: '#333', ...style}}
           keyboardType={numeric ? 'numeric' : 'default'}
           onChangeText={onChangeText}
           onFocus={onFocus}
           multiline={multiline}
           secureTextEntry={secure ? secureText : false}
+          placeholderTextColor="#c4c4c4"
+          maxLength={maxLength}
         />
         {secure && (
           <Ionicons

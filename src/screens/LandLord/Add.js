@@ -6,7 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {height, width} from '../../helper/Index';
+import {
+  formatInput,
+  getSession,
+  height,
+  snackHandler,
+  width,
+} from '../../helper/Index';
 import Location from '../../components/Location';
 import Picker from '../../components/Picker';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -16,8 +22,14 @@ import Typography from '../../components/Typography';
 import Input from '../../components/Input';
 import ImgToBase64 from 'react-native-image-base64';
 import mime from 'mime';
+import axios from 'axios';
+import api from '../../helper/endpoint.json';
+import {useSelector} from 'react-redux';
 
 const Add = ({navigation}) => {
+  const {user} = useSelector(state => state.appSlice);
+
+  const [loading, setLoading] = useState(false);
   const [houseType, setHouseType] = useState('');
   const [state, setState] = useState('');
   const [display, setDisplay] = useState(false);
@@ -26,16 +38,24 @@ const Add = ({navigation}) => {
   const [lng, setLng] = useState('');
   const [images, setImages] = useState([]);
   const [basedImages, setBasedImages] = useState([]);
-
   const [houseDetails, setHouseDetails] = useState({
     description: '',
     rooms: '',
     bathroom: '',
     price: '',
-    space,
+    space: '',
   });
 
-  const {space} = houseDetails;
+  const disabled = Boolean(
+    houseType === '' ||
+      state === '' ||
+      houseDetails.description === '' ||
+      houseDetails.rooms === '' ||
+      houseDetails.price === '' ||
+      houseDetails.bathroom === '' ||
+      houseDetails.space === '' ||
+      basedImages.length < 1,
+  );
 
   const types = [
     {
@@ -57,15 +77,13 @@ const Add = ({navigation}) => {
       multiple: true,
       mediaType: 'photo',
     }).then(async images => {
-      console.log(images);
-      if (images.length < 6) {
+      if (images.length < 3) {
         getImageFromGallery();
       } else {
         const newImages = images.slice(0, 6);
         setImages(newImages);
         const bases = await convertToBase(newImages);
-        setBasedImages(bases)
-        console.log(bases, 'top');
+        setBasedImages(bases);
       }
     });
   };
@@ -81,19 +99,58 @@ const Add = ({navigation}) => {
     return source;
   };
 
-  // const getImageFromGallery = type => {
-  //   const options = {
-  //     selectionLimit: 0,
-  //   };
-  //   if (images.length === 6) return alert('You cannot add more images');
-  //   launchImageLibrary(options, response => {
-  //     console.log('hi');
-  //     if (response.assets) {
-  //       console.log(response);
-  //       setImages([...images, ...response.assets]);
-  //     }
-  //   });
-  // };
+  const creatHouse = async () => {
+    const token = getSession();
+    console.log({
+      house_type: houseType,
+      state,
+      description: houseDetails.description,
+      location: address,
+      rooms: parseInt(houseDetails.rooms),
+      available_rooms: parseInt(houseDetails.space),
+      bathrooms: parseInt(houseDetails.bathroom),
+      price: parseInt(houseDetails.price.replace(',', '')),
+      user_id: user.ID,
+      long_lat: `${lng},${lat}`,
+      images: basedImages,
+    });
+    try {
+      setLoading(true);
+      const data = await axios.post(
+        `${api.url}${api.post.houses}`,
+        {
+          house_type: houseType,
+          state,
+          description: houseDetails.description,
+          location: address,
+          rooms: parseInt(houseDetails.rooms),
+          available_rooms: parseInt(houseDetails.space),
+          bathrooms: parseInt(houseDetails.bathroom),
+          price: parseInt(houseDetails.price.replace(',', '')),
+          user_id: user.ID,
+          long_lat: `${lng},${lat}`,
+          images: basedImages,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+        },
+      );
+
+      console.log(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      if (error.response.data.message !== undefined) {
+        snackHandler(`${error.response.data.message}`, 'error');
+      } else {
+        snackHandler('Error adding your house', 'error');
+      }
+    }
+  };
 
   const filterImage = value => {
     const newImage = images.filter(e => e.fileSize !== value.fileSize);
@@ -148,7 +205,7 @@ const Add = ({navigation}) => {
           <Typography
             text="No. of rooms"
             color="#333"
-            size={1.8}
+            size={1.6}
             bold
             style={styles.text}
           />
@@ -163,7 +220,7 @@ const Add = ({navigation}) => {
           <Typography
             text="No. of Bathrooms"
             color="#333"
-            size={1.8}
+            size={1.6}
             bold
             style={styles.text}
           />
@@ -178,7 +235,7 @@ const Add = ({navigation}) => {
           <Typography
             text="Available Space"
             color="#333"
-            size={1.8}
+            size={1.6}
             bold
             style={styles.text}
           />
@@ -200,6 +257,7 @@ const Add = ({navigation}) => {
           style={styles.text}
         />
         <Input
+          value={formatInput(houseDetails.price)}
           numeric
           onChangeText={text => setHouseDetails({...houseDetails, price: text})}
         />
@@ -224,14 +282,14 @@ const Add = ({navigation}) => {
             <Typography text="+" color="#c4c4c4" size={5} />
           </TouchableOpacity>
           {images.length !== 0 &&
-            images.map((imageDet, index) => (
+            basedImages.map((imageDet, index) => (
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
                 style={styles.ImageContainer}
                 onPress={() => filterImage(imageDet)}>
                 <Image
-                  source={{uri: imageDet.path}}
+                  source={{uri: imageDet}}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -246,7 +304,10 @@ const Add = ({navigation}) => {
         style={{
           marginVertical: height(6),
           marginTop: height(4),
-        }}>
+        }}
+        onPress={creatHouse}
+        disabled={disabled}
+        load={loading}>
         Add House
       </Button>
       <Location
@@ -299,7 +360,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   description: {
-    height: 80,
+    // height: 100,
     textAlignVertical: 'top',
   },
   ImageContainer: {

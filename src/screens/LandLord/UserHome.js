@@ -10,6 +10,7 @@ import {height, width as it} from '../../helper/Index';
 import {SharedElement} from 'react-navigation-shared-element';
 import {Ionicons} from '../../common/Icons';
 import Typography from '../../components/Typography';
+import {useSelector} from 'react-redux';
 
 const {width} = Dimensions.get('window');
 
@@ -17,6 +18,9 @@ const item_width = width * 0.6;
 const item_height = item_width * 1.5;
 
 const UserHome = ({navigation}) => {
+  const state = useSelector(state => state.houseSlice);
+
+  console.log(state);
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   //card
@@ -100,19 +104,41 @@ const UserHome = ({navigation}) => {
         size={it(5)}
         onPress={() => navigation.goBack()}
       />
-      <Animated.FlatList
-        data={Array(30)}
-        renderItem={({item, index}) => <Card index={index} scrollX={scrollX} />}
-        horizontal
-        scrollEventThrottle={16}
-        showsHorizontalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: scrollX}}}],
-          {useNativeDriver: true},
-        )}
-        snapToInterval={item_width}
-        decelerationRate={0}
-      />
+
+      {state.landlordHouses.length === 0 ? (
+        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+          <Typography
+            text="No house added!!"
+            bold
+            size={2}
+            style={{
+              marginTop: height(4),
+            }}
+          />
+          <Ionicons
+            name="add"
+            style={[styles.icon, {alignSelf:'center', marginLeft: 0}]}
+            size={it(5)}
+            onPress={() => navigation.navigate('AddHouse')}
+          />
+        </View>
+      ) : (
+        <Animated.FlatList
+          data={Array(30)}
+          renderItem={({item, index}) => (
+            <Card index={index} scrollX={scrollX} />
+          )}
+          horizontal
+          scrollEventThrottle={16}
+          showsHorizontalScrollIndicator={false}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
+            {useNativeDriver: true},
+          )}
+          snapToInterval={item_width}
+          decelerationRate={0}
+        />
+      )}
     </View>
   );
 };
@@ -132,6 +158,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: height(2),
     marginLeft: height(3),
-    elevation: 2
+    elevation: 2,
   },
 });

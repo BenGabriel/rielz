@@ -22,7 +22,6 @@ const Map = ({navigation}) => {
   const getLocation = async () => {
     Geolocation.getCurrentPosition(
       info => {
-        console.log(info, 'postion');
         setLocationState({
           ...locationState,
           origin: {

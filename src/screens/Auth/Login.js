@@ -13,8 +13,8 @@ import {
   width,
   snackHandler,
   emailRegex,
-  getSession,
   setSession,
+  setUser,
 } from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import Button from '../../components/Button';
@@ -71,8 +71,8 @@ const Login = ({navigation}) => {
         },
       );
 
-      console.log(data);
       setSession(data.token);
+      setUser(JSON.stringify(data.user))
       setLoading(false);
       dispatch(fetchAllUser());
       dispatch(fetchAllHouses());
@@ -87,8 +87,6 @@ const Login = ({navigation}) => {
         snackHandler('Login failed', 'error');
       }
     }
-    // console.log(loginDetails);
-    // navigation.replace('Stack');
   };
 
   return (
