@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Button from '../../components/Button';
 import {Ionicons} from '../../common/Icons';
 import {Colors, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
@@ -16,8 +15,6 @@ import {useSelector} from 'react-redux';
 
 const Profile = ({navigation}) => {
   const {user} = useSelector(state => state.appSlice);
-
-  
 
   const logOut = () => {
     navigation.replace('Details');
@@ -56,7 +53,11 @@ const Profile = ({navigation}) => {
             size={1.8}
             style={{marginLeft: height(4)}}
           />
-          <Typography text={user?.phonenumber} size={1.8} style={{marginLeft: height(4)}} />
+          <Typography
+            text={user?.phonenumber}
+            size={1.8}
+            style={{marginLeft: height(4)}}
+          />
           <Pressable
             style={styles.editProfile}
             onPress={() => navigation.navigate('EditProfile')}>
@@ -65,6 +66,13 @@ const Profile = ({navigation}) => {
         </View>
       </View>
       <View style={styles.body}>
+        <TouchableOpacity style={styles.userDetails} onPress={navigateToHouses}>
+          <Ionicons name="home-outline" size={width(5)} color={Colors.brown} />
+          <Text
+            style={{...Styles.text('#333', 1.8, false), marginLeft: height(4)}}>
+            My Houses
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.userDetails}
           onPress={navigateToAddHouses}>
@@ -76,13 +84,6 @@ const Profile = ({navigation}) => {
           <Text
             style={{...Styles.text('#333', 1.8, false), marginLeft: height(4)}}>
             Add house
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.userDetails} onPress={navigateToHouses}>
-          <Ionicons name="home-outline" size={width(5)} color={Colors.brown} />
-          <Text
-            style={{...Styles.text('#333', 1.8, false), marginLeft: height(4)}}>
-            My Houses
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.userDetails} onPress={logOut}>

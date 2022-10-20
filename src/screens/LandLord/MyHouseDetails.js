@@ -11,11 +11,13 @@ import {
 import {SharedElement} from 'react-navigation-shared-element';
 import {Ionicons, FontAwesome5} from '../../common/Icons';
 import Typography from '../../components/Typography';
-import {Colors, height, width} from '../../helper/Index';
+import {Colors, convertTocurrency, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 
 const MyHouseDetails = ({navigation, route}) => {
-  const {index} = route.params;
+  const {index, details} = route.params;
+
+  console.log(details);
 
   const data = [...Array(7 - 1 + 1).keys()];
 
@@ -42,9 +44,9 @@ const MyHouseDetails = ({navigation, route}) => {
       <ScrollView
         style={{padding: 10, paddingRight: height(0)}}
         showsVerticalScrollIndicator={false}>
-        <Text style={Styles.text('#333', 2, true)}>Location</Text>
+        <Text style={Styles.text('#333', 2, true)}>{details.location}</Text>
         <Text style={{...Styles.text('#999', 1.8, true), marginTop: 8}}>
-          House Type
+          {details.house_type}
         </Text>
         <View style={styles.secContainer}>
           <View
@@ -61,25 +63,39 @@ const MyHouseDetails = ({navigation, route}) => {
               color={Colors.brown}
               style={styles.secIcons}
             />
-            <Text style={Styles.text('#333', 1.6, true)}>2 bedroom</Text>
+            <Text style={Styles.text('#333', 1.6, true)}>
+              {details.rooms} bedroom
+            </Text>
             <FontAwesome5
               name="bath"
               size={26}
               color={Colors.brown}
               style={styles.secIcons}
             />
-            <Text style={Styles.text('#333', 1.6, true)}>1 bedroom</Text>
+            <Text style={Styles.text('#333', 1.6, true)}>
+              {details.bathrooms} bathroom
+            </Text>
             <Ionicons
               name="location-sharp"
               size={26}
               color={Colors.brown}
               style={styles.secIcons}
             />
-            <Text style={Styles.text('#333', 1.6, true)}>Location</Text>
+            <Text style={Styles.text('#333', 1.6, true)}>{details.state}</Text>
+
+            <Ionicons
+              name="build"
+              size={26}
+              color={Colors.brown}
+              style={styles.secIcons}
+            />
+            <Text style={Styles.text('#333', 1.6, true)}>
+              {details.available_rooms} Space
+            </Text>
           </View>
           <SharedElement id={`item.${index}.photo`}>
             <Image
-              source={require('../../assets/images/image.jpg')}
+              source={{uri: details.images[0]}}
               style={{
                 width: width(65),
                 height: height(50),
@@ -96,24 +112,23 @@ const MyHouseDetails = ({navigation, route}) => {
             marginTop: height(1),
             width: '95%',
           }}>
-          Clean and neat house with modern interior built in the midle of the
-          city making it easier for you to access the city center
+          {details.description}
         </Text>
         <Text style={{...Styles.text(Colors.black, 1.8, true), marginTop: 15}}>
           Gallery
         </Text>
         <View style={{marginVertical: 20}}>
           <FlatList
-            data={Array(5)}
-            keyExtractor={() => Math.random(7)}
+            data={details.images}
+            keyExtractor={(_, i) => i.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
-            renderItem={({index}) => (
+            renderItem={({item}) => (
               <TouchableOpacity
                 style={styles.galleryContainer}
                 activeOpacity={0.6}>
                 <Image
-                  source={require('../../assets/images/image.jpg')}
+                  source={{uri: item}}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -130,7 +145,7 @@ const MyHouseDetails = ({navigation, route}) => {
             marginBottom: 30,
           }}>
           <Text style={Styles.text(Colors.grey, 1.7, false)}>Price</Text>
-          <Text style={Styles.text(Colors.black, 2, true)}>₦900</Text>
+          <Text style={Styles.text(Colors.black, 2, true)}>₦{convertTocurrency(details.price)}</Text>
         </View>
         <View style={{paddingRight: height(2), marginBottom: height(2)}}>
           <View

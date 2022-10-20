@@ -34,12 +34,7 @@ export const fetchUser = createAsyncThunk('fetchUser', async () => {
 });
 
 export const fetchAllHouses = createAsyncThunk('fetchHouses', async () => {
-  const token = await getSession();
-  const res = await axios.get(`${api.url}${api.get.houses}`, {
-    headers: {
-      Authorization: `${token}`,
-    },
-  });
+  const res = await axios.get(`${api.url}${api.get.houses}`);
   if (res.status === 200) {
     return res.data;
   } else {
@@ -50,8 +45,9 @@ export const fetchAllHouses = createAsyncThunk('fetchHouses', async () => {
 export const fetchLandlordHouses = createAsyncThunk(
   'fetchLandlordHouses',
   async () => {
+    const user = await getUser();
     const token = await getSession();
-    const res = await axios.get(`${api.url}${api.get.houses}/landlord`, {
+    const res = await axios.get(`${api.url}${api.get.getLandlord}/${user.ID}`, {
       headers: {
         Authorization: `${token}`,
       },

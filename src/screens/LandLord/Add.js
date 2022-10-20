@@ -24,10 +24,12 @@ import ImgToBase64 from 'react-native-image-base64';
 import mime from 'mime';
 import axios from 'axios';
 import api from '../../helper/endpoint.json';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchAllHouses, fetchLandlordHouses} from '../../redux/actions';
 
 const Add = ({navigation}) => {
   const {user} = useSelector(state => state.appSlice);
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [houseType, setHouseType] = useState('');
@@ -100,20 +102,7 @@ const Add = ({navigation}) => {
   };
 
   const creatHouse = async () => {
-    const token = getSession();
-    console.log({
-      house_type: houseType,
-      state,
-      description: houseDetails.description,
-      location: address,
-      rooms: parseInt(houseDetails.rooms),
-      available_rooms: parseInt(houseDetails.space),
-      bathrooms: parseInt(houseDetails.bathroom),
-      price: parseInt(houseDetails.price.replace(',', '')),
-      user_id: user.ID,
-      long_lat: `${lng},${lat}`,
-      images: basedImages,
-    });
+    const token = await getSession();
     try {
       setLoading(true);
       const data = await axios.post(
@@ -126,7 +115,7 @@ const Add = ({navigation}) => {
           rooms: parseInt(houseDetails.rooms),
           available_rooms: parseInt(houseDetails.space),
           bathrooms: parseInt(houseDetails.bathroom),
-          price: parseInt(houseDetails.price.replace(',', '')),
+          price: parseInt(houseDetails.price.replace(/,/g, '')),
           user_id: user.ID,
           long_lat: `${lng},${lat}`,
           images: basedImages,
@@ -141,6 +130,10 @@ const Add = ({navigation}) => {
 
       console.log(data);
       setLoading(false);
+      dispatch(fetchLandlordHouses());
+      dispatch(fetchAllHouses());
+      snackHandler(data.data.message);
+      navigation.navigate('OwnerDashboard');
     } catch (error) {
       setLoading(false);
       console.log(error);

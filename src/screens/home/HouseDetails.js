@@ -1,20 +1,34 @@
-import React, {useEffect} from 'react';
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Animated,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, StyleSheet, Text, View, Animated} from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
-import {Colors, height, width} from '../../helper/Index';
+import {Colors, convertTocurrency, height, width} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import {Ionicons, FontAwesome5} from '../../common/Icons';
+import api from '../../helper/endpoint.json';
+import axios from 'axios';
 
 const HouseDetails = ({navigation, route}) => {
-  const {item} = route.params;
+  const {item, details} = route.params;
+
+  const [landLord, setLandLord] = useState(null);
+
+  const getLandlord = async () => {
+    try {
+      const {data} = await axios.get(
+        `${api.url}${api.get.user}/${details.user_id}`,
+      );
+      console.log(data);
+      setLandLord({
+        ID: data.ID,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        phonenumber: data.phonenumber
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const val = new Animated.Value(50);
 
@@ -26,6 +40,7 @@ const HouseDetails = ({navigation, route}) => {
     }).start();
 
   useEffect(() => {
+    getLandlord();
     animateValues();
   }, []);
 
@@ -34,16 +49,12 @@ const HouseDetails = ({navigation, route}) => {
     outputRange: [0, 400],
   });
 
-  const controlClick = () => {
-    console.log('hi');
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <SharedElement id={`item.${item}.photo`}>
           <Image
-            source={require('../../assets/images/image.jpg')}
+            source={{uri: details?.images[0]}}
             resizeMode="cover"
             style={{
               width: '100%',
@@ -79,27 +90,62 @@ const HouseDetails = ({navigation, route}) => {
             backgroundColor: '#fff',
             borderRadius: 100,
           }}
-          onPress={() => navigation.navigate('Direction')}
+          onPress={() =>
+            navigation.navigate('Direction', {
+              item: {...details, long_lat: details.long_lat.split(',')},
+            })
+          }
         />
       </View>
       <View style={styles.secContainer}>
         <Animated.View style={{...styles.details, marginTop: mainInterpolate}}>
-          <Text style={Styles.text(Colors.black, 1.8, true)}>house type</Text>
-          <Text style={Styles.text(Colors.grey, 1.6, false)}>Location</Text>
+          <View style={Styles.flexRowSpaceCenter}>
+            <Text style={Styles.text(Colors.black, 1.8, true)}>
+              {details.house_type}
+            </Text>
+            <Text
+              style={{
+                ...Styles.text('blue', 1.8, true),
+                textDecorationLine: 'underline',
+              }}
+              onPress={() =>
+                navigation.navigate('LandlordDetails', {
+                  landLord,
+                })
+              }>
+              {landLord?.firstname}
+            </Text>
+          </View>
+          <Text style={Styles.text(Colors.grey, 1.6, false)}>
+            {details.location}
+          </Text>
           <View style={{flexDirection: 'row', marginTop: 6}}>
             <View style={styles.detailsIcons}>
               <Ionicons name="bed-outline" size={15} color={Colors.grey} />
-              <Text style={Styles.text(Colors.grey, 1.5, false)}>4</Text>
+              <Text style={Styles.text(Colors.grey, 1.5, false)}>
+                {details.rooms}
+              </Text>
             </View>
             <View style={styles.detailsIcons}>
               <FontAwesome5 name="bath" size={15} color={Colors.grey} />
-              <Text style={Styles.text(Colors.grey, 1.5, false)}>2</Text>
+              <Text style={Styles.text(Colors.grey, 1.5, false)}>
+                {details.bathrooms}
+              </Text>
             </View>
+            <Text
+              style={[
+                Styles.text(Colors.black, 1.8, true),
+                {
+                  flex: 1,
+                  textAlign: 'right',
+                },
+              ]}>
+              ₦{convertTocurrency(details.price)}
+            </Text>
           </View>
         </Animated.View>
         <Text style={{...Styles.text('#aaa', 1.6, false), marginTop: -20}}>
-          Clean and neat house with modern interior built in the midle of the
-          city making it easier for you to access the city center
+          {details.description}
         </Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text
@@ -108,63 +154,33 @@ const HouseDetails = ({navigation, route}) => {
           </Text>
           <Text
             style={{...Styles.text('#00f', 1.6, true), marginTop: 15}}
-            onPress={() => navigation.navigate('FullImages')}>
+            onPress={() =>
+              navigation.navigate('FullImages', {
+                images: details.images,
+              })
+            }>
             View All
           </Text>
         </View>
         <View style={{marginVertical: 20}}>
           <FlatList
-            data={Array(5)}
-            keyExtractor={() => Math.random(7)}
+            data={details.images}
+            keyExtractor={(t, i) => i.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
-            renderItem={({index}) => (
-              <TouchableOpacity
-                style={styles.galleryContainer}
-                activeOpacity={0.6}
-                onPress={() => controlClick()}>
+            renderItem={({item}) => (
+              <View style={styles.galleryContainer}>
                 <Image
-                  source={require('../../assets/images/image.jpg')}
+                  source={{uri: item}}
                   style={{
                     width: '100%',
                     height: '100%',
                     borderRadius: 20,
                   }}
                 />
-              </TouchableOpacity>
+              </View>
             )}
           />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 20,
-          }}>
-          <View>
-            <Text style={Styles.text(Colors.grey, 1.7, false)}>Price</Text>
-            <Text style={Styles.text(Colors.black, 2, true)}>₦900</Text>
-          </View>
-          <Ionicons
-            name="call"
-            size={20}
-            color="#fff"
-            style={{
-              padding: 10,
-              backgroundColor: '#997950',
-              borderRadius: 100,
-              marginLeft: 80,
-            }}
-          />
-          <Text
-            style={{
-              ...Styles.text('blue', 2, true),
-              textDecorationLine: 'underline',
-            }}
-            onPress={() => navigation.navigate('LandlordDetails')}>
-            Chidi
-          </Text>
         </View>
       </View>
     </View>

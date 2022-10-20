@@ -75,11 +75,11 @@ const formatInput = n => {
 
 const convertTocurrency = value => {
   return Math.abs(Number(value)) >= 1.0e9
-    ? (Math.abs(Number(value)) / 1.0e9).toFixed(1) + 'B'
+    ? (Math.abs(Number(value)) / 1.0e9).toFixed(0) + 'B'
     : Math.abs(Number(value)) >= 1.0e6
-    ? (Math.abs(Number(value)) / 1.0e6).toFixed(1) + 'M'
+    ? (Math.abs(Number(value)) / 1.0e6).toFixed(0) + 'M'
     : Math.abs(Number(value)) >= 1.0e3
-    ? (Math.abs(Number(value)) / 1.0e3).toFixed(1) + 'K'
+    ? (Math.abs(Number(value)) / 1.0e3).toFixed(0) + 'K'
     : Math.abs(Number(value));
 };
 

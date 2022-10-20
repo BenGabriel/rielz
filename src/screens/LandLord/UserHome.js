@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Animated,
   Dimensions,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -10,7 +11,9 @@ import {height, width as it} from '../../helper/Index';
 import {SharedElement} from 'react-navigation-shared-element';
 import {Ionicons} from '../../common/Icons';
 import Typography from '../../components/Typography';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {useEffect} from 'react';
+import {fetchLandlordHouses} from '../../redux/actions';
 
 const {width} = Dimensions.get('window');
 
@@ -19,12 +22,17 @@ const item_height = item_width * 1.5;
 
 const UserHome = ({navigation}) => {
   const state = useSelector(state => state.houseSlice);
+  const dispatch = useDispatch();
 
   console.log(state);
+
+  useEffect(() => {
+    dispatch(fetchLandlordHouses);
+  }, []);
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   //card
-  const Card = ({index, scrollX}) => {
+  const Card = ({index, scrollX, item}) => {
     const inputRange = [
       (index - 1) * item_width,
       index * item_width,
@@ -48,18 +56,21 @@ const UserHome = ({navigation}) => {
         style={styles.card}
         activeOpacity={0.6}
         onPress={() =>
-          navigation.navigate('Details', {
-            screen: 'MyHouseDetails',
-            params: {
-              index,
-            },
-          })
+          item.ID === 28489477277
+            ? null
+            : navigation.navigate('Details', {
+                screen: 'MyHouseDetails',
+                params: {
+                  index,
+                  details: item,
+                },
+              })
         }>
         <SharedElement
           id={`item.${index}.photo`}
           style={{height: item_height, width: item_width, padding: 12}}>
           <Animated.Image
-            source={require('../../assets/images/image.jpg')}
+            source={{uri: item?.images[0]}}
             style={{
               width: '100%',
               height: '100%',
@@ -75,15 +86,16 @@ const UserHome = ({navigation}) => {
             marginTop: 10,
           }}>
           <Typography
-            text="House Type"
+            text={item?.location}
             bold
             size={2}
             style={{
               marginTop: height(4),
+              textAlign: 'center',
             }}
           />
           <Typography
-            text="location"
+            text={item?.house_type}
             size={1.7}
             color="#777"
             style={{
@@ -97,7 +109,10 @@ const UserHome = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, padding: 10}}>
+    <ScrollView
+      style={{flex: 1, padding: 10}}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{flex: 1}}>
       <Ionicons
         name="chevron-back-sharp"
         style={styles.icon}
@@ -117,16 +132,17 @@ const UserHome = ({navigation}) => {
           />
           <Ionicons
             name="add"
-            style={[styles.icon, {alignSelf:'center', marginLeft: 0}]}
+            style={[styles.icon, {alignSelf: 'center', marginLeft: 0}]}
             size={it(5)}
             onPress={() => navigation.navigate('AddHouse')}
           />
         </View>
       ) : (
         <Animated.FlatList
-          data={Array(30)}
+          data={[...state.landlordHouses, {ID: 28489477277, images: ['38838']}]}
+          keyExtractor={i => i.ID.toString()}
           renderItem={({item, index}) => (
-            <Card index={index} scrollX={scrollX} />
+            <Card index={index} scrollX={scrollX} item={item} />
           )}
           horizontal
           scrollEventThrottle={16}
@@ -139,7 +155,7 @@ const UserHome = ({navigation}) => {
           decelerationRate={0}
         />
       )}
-    </View>
+    </ScrollView>
   );
 };
 

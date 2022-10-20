@@ -11,12 +11,14 @@ import {
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {Ionicons, FontAwesome5} from '../../common/Icons';
-import {Colors, width} from '../../helper/Index';
+import {Colors, convertTocurrency, width} from '../../helper/Index';
 import MapViewDirections from 'react-native-maps-directions';
 import Styles from '../../helper/Styles';
 import {SharedElement} from 'react-navigation-shared-element';
+import {useRoute} from '@react-navigation/native';
 
 const Direction = ({navigation}) => {
+  const {item} = useRoute().params;
   useEffect(() => {
     requestPermissions();
     getLocation();
@@ -50,7 +52,7 @@ const Direction = ({navigation}) => {
   const getLocation = async () => {
     Geolocation.getCurrentPosition(
       info => {
-        console.log(info, 'postion');
+        console.log(info);
         setLocationState({
           ...locationState,
           origin: {
@@ -67,7 +69,6 @@ const Direction = ({navigation}) => {
     );
   };
 
-  const item = 1;
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
@@ -78,8 +79,8 @@ const Direction = ({navigation}) => {
           region={{
             latitude: locationState.origin.latitude,
             longitude: locationState.origin.longitude,
-            latitudeDelta: 0.922,
-            longitudeDelta: 0.421,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
           }}>
           <Marker
             coordinate={{
@@ -91,29 +92,25 @@ const Direction = ({navigation}) => {
           </Marker>
           <Marker
             coordinate={{
-              latitude: 6.2451,
-              longitude: 7.3123,
+              latitude: parseFloat(item.long_lat[1]),
+              longitude: parseFloat(item.long_lat[0]),
             }}>
             <Ionicons name="home" size={width(6)} color="#F69033" />
           </Marker>
           <MapViewDirections
             origin={{
-              latitude: 6.2451,
-              longitude: 7.3123,
+              latitude: locationState.origin.latitude,
+              longitude: locationState.origin.longitude,
             }}
             destination={{
-              latitude: 6.3940908,
-              longitude: 7.5028977,
+              latitude: parseFloat(item.long_lat[1]),
+              longitude: parseFloat(item.long_lat[0]),
             }}
             apikey="AIzaSyCGPY_hsHcarYRmtuyvZCTOyoRWGN7-JGA"
             strokeColor={Colors.primary}
             strokeWidth={3}
             optimizeWaypoints={true}
-            onStart={params => {
-              console.log(
-                `Started routing between "${params.origin}" and "${params.destination}"`,
-              );
-            }}
+            // onStart={params => {}}
             onReady={result => {
               mapRef.current.fitToCoordinates(result.coordinates, {
                 edgePadding: {
@@ -124,18 +121,18 @@ const Direction = ({navigation}) => {
                 },
               });
             }}
-            onError={errorMessage => {
-              console.log('GOT AN ERROR');
-            }}
+            onError={errorMessage => {}}
           />
         </MapView>
         <Pressable
           style={styles.details}
-          onPress={() => navigation.replace('HouseDetails', {item})}>
+          onPress={() =>
+            navigation.replace('HouseDetails', {item: item.ID, details: item})
+          }>
           <View style={styles.imageContainer}>
-            <SharedElement id={`item.${item}.photo`}>
+            <SharedElement id={`item.${item?.ID}.photo`}>
               <Image
-                source={require('../../assets/images/image.jpg')}
+                source={{uri: item.images[0]}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -145,19 +142,29 @@ const Direction = ({navigation}) => {
             </SharedElement>
           </View>
           <View style={{marginLeft: 20}}>
-            <Text style={Styles.text(Colors.black, 1.6, true)}>location</Text>
+            <Text style={Styles.text(Colors.black, 1.6, true)}>
+              {item.location}
+            </Text>
             <Text
               style={{...Styles.text(Colors.black, 1.6, false), marginTop: 3}}>
-              ₦900
+              ₦{convertTocurrency(item.price)}
             </Text>
             <View style={{flexDirection: 'row', marginTop: 5}}>
               <View style={styles.detailsIcons}>
                 <Ionicons name="bed-outline" size={20} color="#542e22" />
-                <Text style={Styles.text(Colors.grey, 1.5, false)}>4</Text>
+                <Text style={Styles.text(Colors.grey, 1.5, false)}>
+                  {item.rooms}
+                </Text>
               </View>
               <View style={styles.detailsIcons}>
                 <FontAwesome5 name="bath" size={16} color="#542e22" />
-                <Text style={{...Styles.text(Colors.grey, 1.5, false), marginTop: 4.5}}>2</Text>
+                <Text
+                  style={{
+                    ...Styles.text(Colors.grey, 1.5, false),
+                    marginTop: 4.5,
+                  }}>
+                  {item.bathrooms}
+                </Text>
               </View>
             </View>
           </View>
