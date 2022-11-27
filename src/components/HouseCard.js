@@ -24,7 +24,8 @@ const HouseCard = ({item}) => {
       <Pressable style={styles.imageContainer} onPress={navigate}>
         <SharedElement id={`item.${item.ID}.photo`}>
           <Image
-            source={{uri: item?.images[0]}}
+            // source={{uri: item?.images[0]}}
+            source={require("../assets/images/image.jpg")}
             resizeMode="cover"
             style={{
               width: '100%',

@@ -28,14 +28,14 @@ const Search = () => {
         <Ionicons name="search" size={15} />
       </View>
       <View>
-        <FlatList
+        {/* <FlatList
           data={data}
           renderItem={({item}) => <HouseCard item={item} />}
           keyExtractor={item => `${item}`}
           showsVerticalScrollIndicator={false}
           numColumns={2}
           ListFooterComponent={() => <View style={{padding: 40}} />}
-        />
+        /> */}
       </View>
     </View>
   );

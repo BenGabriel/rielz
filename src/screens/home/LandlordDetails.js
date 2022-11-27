@@ -25,9 +25,7 @@ const LandlordDetails = ({route}) => {
       const {data} = await axios.get(
         `${api.url}${api.get.getLandlord}/${landLord.ID}`,
       );
-      console.log(data);
       setLandLordHouses(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

@@ -52,8 +52,6 @@ const MyHouseDetails = ({navigation, route}) => {
     getHouse();
   }, []);
 
-  const data = [...Array(7 - 1 + 1).keys()];
-
   return (
     <View
       style={{
@@ -70,7 +68,9 @@ const MyHouseDetails = ({navigation, route}) => {
         />
         <Text
           style={Styles.text('blue', 1.8, true)}
-          onPress={() => navigation.navigate('EditHouse')}>
+          onPress={() => navigation.navigate('EditHouse', {
+            details
+          })}>
           Edit
         </Text>
       </View>
@@ -135,7 +135,8 @@ const MyHouseDetails = ({navigation, route}) => {
           </View>
           <SharedElement id={`item.${index}.photo`}>
             <Image
-              source={{uri: details.images[0]}}
+              // source={{uri: details.images[0]}}
+            source={require("../../assets/images/image.jpg")}
               style={{
                 width: width(65),
                 height: height(50),
@@ -168,7 +169,9 @@ const MyHouseDetails = ({navigation, route}) => {
                 style={styles.galleryContainer}
                 activeOpacity={0.6}>
                 <Image
-                  source={{uri: item}}
+                  // source={{uri: item}}
+                  
+            source={require("../../assets/images/image.jpg")}
                   style={{
                     width: '100%',
                     height: '100%',

@@ -69,7 +69,8 @@ const UserHome = ({navigation}) => {
           id={`item.${index}.photo`}
           style={{height: item_height, width: item_width, padding: 12}}>
           <Animated.Image
-            source={{uri: item?.images[0]}}
+            // source={{uri: item?.images[0]}}
+            source={require("../../assets/images/image.jpg")}
             style={{
               width: '100%',
               height: '100%',

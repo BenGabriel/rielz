@@ -10,38 +10,97 @@ import {
 import React, {useState} from 'react';
 import EditScreensContainer from '../../components/EditScreensContainer';
 import Styles from '../../helper/Styles';
-import {Colors, height, width} from '../../helper/Index';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {getSession, height, snackHandler, width} from '../../helper/Index';
 import Button from '../../components/Button';
+import api from '../../helper/endpoint.json';
+import {useDispatch} from 'react-redux';
+import {fetchLandlordHouses} from '../../redux/actions';
+import axios from 'axios';
+import ImgToBase64 from 'react-native-image-base64';
+import ImagePicker from 'react-native-image-crop-picker';
 
-const EditHouse = ({navigation}) => {
-  const [images, setImages] = useState([]);
+const EditHouse = ({navigation, route: {params}}) => {
+  const dispatch = useDispatch();
+  const {details} = params;
+  console.log(details);
+
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState(details.images);
+  const [basedImages, setBasedImages] = useState(details.images);
   const [houseDetails, setHouseDetails] = useState({
-    description: '',
-    rooms: '',
-    bathroom: '',
-    price: '',
+    description: details.description,
+    rooms: details.available_rooms.toString(),
+    bathroom: details.bathrooms.toString(),
+    price: details.price.toString(),
   });
 
   const {description, rooms, bathroom, price} = houseDetails;
 
-  const getImageFromGallery = type => {
-    const options = {
-      selectionLimit: 0,
-    };
-    if (images.length === 6) return alert('You cannot add more images');
-    launchImageLibrary(options, response => {
-      console.log('hi');
-      if (response.assets) {
-        console.log(response);
-        setImages([...images, ...response.assets]);
+  const getImageFromGallery = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+      mediaType: 'photo',
+    }).then(async images => {
+      if (images.length < 3) {
+        getImageFromGallery();
+      } else {
+        const newImages = images.slice(0, 6);
+        setImages(newImages);
+        const bases = await convertToBase(newImages);
+        setBasedImages(bases);
       }
     });
+  };
+
+  const convertToBase = async array => {
+    let source = [];
+    for (let i = 0; i < array.length; i++) {
+      let image = array[i];
+      let type = mime.getType(image.path);
+      const base = await ImgToBase64.getBase64String(image.path);
+      source.push(`data:${type};base64,` + base);
+    }
+    return source;
   };
 
   const filterImage = value => {
     const newImage = images.filter(e => e.fileSize !== value.fileSize);
     setImages(newImage);
+  };
+
+  const editHouse = async () => {
+    const token = await getSession();
+    try {
+      setLoading(true);
+      const data = await axios.put(
+        `${api.url}${api.post.houses}/${details.ID}`,
+        {
+          description: houseDetails.description,
+          available_rooms: parseInt(houseDetails.space),
+          bathrooms: parseInt(houseDetails.bathroom),
+          price: parseInt(houseDetails.price.replace(/,/g, '')),
+          images: basedImages,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+        },
+      );
+      setLoading(false);
+      dispatch(fetchLandlordHouses());
+      snackHandler(data.data.message);
+      navigation.navigate('OwnerDashboard');
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      if (error.response.data.message !== undefined) {
+        snackHandler(`${error.response.data.message}`, 'error');
+      } else {
+        snackHandler('Error Editing your house', 'error');
+      }
+    }
   };
 
   return (
@@ -75,7 +134,7 @@ const EditHouse = ({navigation}) => {
               ...Styles.text('#333', 1.8, true),
               marginBottom: height(1),
             }}>
-            No. of rooms
+            Available rooms
           </Text>
           <TextInput
             value={rooms}
@@ -131,14 +190,15 @@ const EditHouse = ({navigation}) => {
           horizontal
           style={{
             width: '100%',
-          }}>
+          }}
+          showsHorizontalScrollIndicator={false}>
           <TouchableOpacity
             style={styles.addimage}
             onPress={() => getImageFromGallery()}>
             <Text style={Styles.text('#c4c4c4', 5, false)}>+</Text>
           </TouchableOpacity>
           {images.length !== 0 &&
-            images.map((imageDet, index) => (
+            basedImages.map((imageDet, index) => (
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
@@ -152,7 +212,7 @@ const EditHouse = ({navigation}) => {
                 }}
                 onPress={() => filterImage(imageDet)}>
                 <Image
-                  source={{uri: imageDet.uri}}
+                  source={{uri: imageDet}}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -167,7 +227,9 @@ const EditHouse = ({navigation}) => {
         style={{
           marginVertical: height(6),
           marginTop: height(4),
-        }}>
+        }}
+        onPress={editHouse}
+        load={loading}>
         Edit House
       </Button>
     </EditScreensContainer>

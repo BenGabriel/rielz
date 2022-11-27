@@ -25,8 +25,6 @@ import api from '../../helper/endpoint.json';
 import {useDispatch} from 'react-redux';
 import {
   fetchAllHouses,
-  fetchAllUser,
-  fetchLandlordHouses,
 } from '../../redux/actions';
 
 const Login = ({navigation}) => {
@@ -71,14 +69,10 @@ const Login = ({navigation}) => {
         },
       );
 
-      console.log(data)
-
       setSession(data.token);
       setUser(JSON.stringify(data.user))
       setLoading(false);
-      dispatch(fetchAllUser());
       dispatch(fetchAllHouses());
-      dispatch(fetchLandlordHouses());
       navigation.replace('Stack');
     } catch (error) {
       setLoading(false);

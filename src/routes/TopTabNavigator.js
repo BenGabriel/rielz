@@ -91,7 +91,6 @@ const TopTabNavigator = ({navigation}) => {
               name="search"
               size={20}
               color={focused ? color : '#542e22'}
-              onPress={() => navigation.navigate('Details')}
             />
           ),
         }}

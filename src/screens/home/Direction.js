@@ -107,6 +107,7 @@ const Direction = ({navigation}) => {
               longitude: parseFloat(item.long_lat[0]),
             }}
             apikey="AIzaSyCGPY_hsHcarYRmtuyvZCTOyoRWGN7-JGA"
+            // apikey="AIzaSyB7KFy_rs_6yfqJM2F4QXg1AwUxbZyB5kk"
             strokeColor={Colors.primary}
             strokeWidth={3}
             optimizeWaypoints={true}
@@ -132,7 +133,8 @@ const Direction = ({navigation}) => {
           <View style={styles.imageContainer}>
             <SharedElement id={`item.${item?.ID}.photo`}>
               <Image
-                source={{uri: item.images[0]}}
+                // source={{uri: item.images[0]}}
+                source={require("../../assets/images/image.jpg")}
                 style={{
                   width: '100%',
                   height: '100%',

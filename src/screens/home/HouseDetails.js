@@ -25,7 +25,7 @@ const HouseDetails = ({navigation, route}) => {
       const {data} = await axios.get(
         `${api.url}${api.get.user}/${details.user_id}`,
       );
-      console.log(data);
+      // console.log(data);
       setCurrentUserID(user.ID);
       setLandLord({
         ID: data.ID,
@@ -63,7 +63,9 @@ const HouseDetails = ({navigation, route}) => {
       <View style={styles.imageContainer}>
         <SharedElement id={`item.${item}.photo`}>
           <Image
-            source={{uri: details?.images[0]}}
+            // source={{uri: details?.images[0]}}
+            
+            source={require("../../assets/images/image.jpg")}
             resizeMode="cover"
             style={{
               width: '100%',
@@ -188,7 +190,9 @@ const HouseDetails = ({navigation, route}) => {
             renderItem={({item}) => (
               <View style={styles.galleryContainer}>
                 <Image
-                  source={{uri: item}}
+                  // source={{uri: item}}
+                  
+            source={require("../../assets/images/image.jpg")}
                   style={{
                     width: '100%',
                     height: '100%',

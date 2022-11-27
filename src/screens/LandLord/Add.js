@@ -127,8 +127,6 @@ const Add = ({navigation}) => {
           },
         },
       );
-
-      console.log(data);
       setLoading(false);
       dispatch(fetchLandlordHouses());
       dispatch(fetchAllHouses());
