@@ -1,20 +1,62 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, TextInput, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  FlatList,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import {Ionicons} from '../../common/Icons';
-import {height} from '../../helper/Index';
+import {Colors, getSession, height, snackHandler} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import HouseCard from '../../components/HouseCard';
+import {NigeriaState} from '../../helper/NigeriaState';
+import Typography from '../../components/Typography';
+import axios from 'axios';
+import api from '../../helper/endpoint.json';
 
 const Search = () => {
   const [search, setSearch] = useState('');
   const [searchLoad, setSearchLoad] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [houses, setHouses] = useState([]);
 
   const data = [...Array(12 - 1 + 1).keys()];
 
-  const searchHouse = () => {
-    console.log(search);
+  const searchHouse = async item => {
+    try {
+      setLoading(true);
+      const data = await axios.get(`${api.url}${api.get.houses}/${item}`);
+
+      if (data.data.length === 0) {
+        snackHandler('No houses in this region yet', 'error');
+      } else {
+        setHouses(data.data);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data.message !== undefined) {
+        snackHandler(`${error.response.data.message}`, 'error');
+      } else {
+        snackHandler('Error adding your house', 'error');
+      }
+    }
   };
 
+  const changeVisibility = () => {
+    setHouses([]);
+    setModalVisible(!modalVisible);
+  };
+
+  const clickState = item => {
+    changeVisibility();
+    setSearch(item);
+    searchHouse(item);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -23,20 +65,55 @@ const Search = () => {
           style={styles.input}
           value={search}
           onChangeText={text => setSearch(text)}
-          onEndEditing={searchHouse}
+          onFocus={changeVisibility}
         />
         <Ionicons name="search" size={15} />
       </View>
-      <View>
-        {/* <FlatList
-          data={data}
-          renderItem={({item}) => <HouseCard item={item} />}
-          keyExtractor={item => `${item}`}
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          ListFooterComponent={() => <View style={{padding: 40}} />}
-        /> */}
+      <View style={{flex: 1, width: '100%'}}>
+        {loading ? (
+          <Typography text="Loading" color="#333" size={1.8} bold />
+        ) : houses.length === 0 ? (
+          <Typography
+            text="Search for a house close to you"
+            color="#333"
+            size={1.8}
+            bold
+          />
+        ) : (
+          <FlatList
+            data={houses}
+            renderItem={({item}) => <HouseCard item={item} />}
+            keyExtractor={item => `${item}`}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            ListFooterComponent={() => <View style={{padding: 40}} />}
+          />
+        )}
       </View>
+      <Modal animationType="slide" visible={modalVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'white',
+          }}>
+          <FlatList
+            data={NigeriaState}
+            keyExtractor={(_, i) => i.toString()}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={{
+                  padding: height(2),
+                  borderBottomWidth: 0.5,
+                  borderColor: Colors.grey,
+                }}
+                onPress={() => clickState(item.value)}>
+                <Typography text={item.value} color="#333" size={1.8} bold />
+              </TouchableOpacity>
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };

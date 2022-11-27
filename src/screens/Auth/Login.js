@@ -76,7 +76,7 @@ const Login = ({navigation}) => {
       navigation.replace('Stack');
     } catch (error) {
       setLoading(false);
-      console.log(error.response);
+      // console.log(error.response);
       if (error.response.data.message !== undefined) {
         snackHandler(`${error.response.data.message}`, 'error');
       } else {
