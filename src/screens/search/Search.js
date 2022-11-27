@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Ionicons} from '../../common/Icons';
-import {Colors, getSession, height, snackHandler} from '../../helper/Index';
+import {Colors, height, snackHandler} from '../../helper/Index';
 import Styles from '../../helper/Styles';
 import HouseCard from '../../components/HouseCard';
 import {NigeriaState} from '../../helper/NigeriaState';
@@ -22,6 +22,7 @@ const Search = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [houses, setHouses] = useState([]);
+  const [message, setMessage] = useState('Search for a house close to you');
 
   const data = [...Array(12 - 1 + 1).keys()];
 
@@ -29,9 +30,9 @@ const Search = () => {
     try {
       setLoading(true);
       const data = await axios.get(`${api.url}${api.get.houses}/${item}`);
-
       if (data.data.length === 0) {
         snackHandler('No houses in this region yet', 'error');
+        setMessage('No houses in this region yet');
       } else {
         setHouses(data.data);
       }
@@ -48,6 +49,7 @@ const Search = () => {
   };
 
   const changeVisibility = () => {
+    setMessage('Search for a house close to you');
     setHouses([]);
     setModalVisible(!modalVisible);
   };
@@ -73,12 +75,7 @@ const Search = () => {
         {loading ? (
           <Typography text="Loading" color="#333" size={1.8} bold />
         ) : houses.length === 0 ? (
-          <Typography
-            text="Search for a house close to you"
-            color="#333"
-            size={1.8}
-            bold
-          />
+          <Typography text={message} color="#333" size={1.8} bold />
         ) : (
           <FlatList
             data={houses}
