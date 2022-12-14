@@ -14,7 +14,7 @@ import {Ionicons} from '../../common/Icons';
 import Typography from '../../components/Typography';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect} from 'react';
-import {fetchLandlordHouses} from '../../redux/actions';
+import {fetchLandlordHouses, fetchUser} from '../../redux/actions';
 
 const {width} = Dimensions.get('window');
 
@@ -26,8 +26,10 @@ const UserHome = ({navigation}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchLandlordHouses);
+    dispatch(fetchLandlordHouses());
+    dispatch(fetchUser());
   }, []);
+
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   //card
@@ -57,12 +59,9 @@ const UserHome = ({navigation}) => {
         onPress={() =>
           item.ID === 28489477277
             ? null
-            : navigation.navigate('Details', {
-                screen: 'MyHouseDetails',
-                params: {
-                  index,
-                  details: item,
-                },
+            : navigation.navigate('MyHouseDetails', {
+                index,
+                details: item,
               })
         }>
         <SharedElement
@@ -70,7 +69,11 @@ const UserHome = ({navigation}) => {
           style={{height: item_height, width: item_width, padding: 12}}>
           <Animated.Image
             // source={{uri: item?.images[0]}}
-            source={require("../../assets/images/image.jpg")}
+            source={
+              item.ID === 28489477277
+                ? null
+                : require('../../assets/images/image.jpg')
+            }
             style={{
               width: '100%',
               height: '100%',
@@ -121,10 +124,10 @@ const UserHome = ({navigation}) => {
         />
       }>
       <Ionicons
-        name="chevron-back-sharp"
+        name="person"
         style={styles.icon}
         size={it(5)}
-        onPress={() => navigation.goBack()}
+        onPress={() => navigation.navigate('LandlordProfile')}
       />
 
       {state.landlordHouses.length === 0 ? (
@@ -178,7 +181,7 @@ const styles = StyleSheet.create({
     padding: height(1.5),
     borderRadius: 100,
     backgroundColor: '#fff',
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end',
     marginTop: height(2),
     marginLeft: height(3),
     elevation: 2,

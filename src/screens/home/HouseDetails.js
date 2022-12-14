@@ -17,19 +17,15 @@ const HouseDetails = ({navigation, route}) => {
   const {item, details} = route.params;
 
   const [landLord, setLandLord] = useState(null);
-  const [currentUserID, setCurrentUserID] = useState('');
 
   const getLandlord = async () => {
     try {
-      const user = await getUser();
       const {data} = await axios.get(
         `${api.url}${api.get.user}/${details.user_id}`,
       );
-      // console.log(data);
-      setCurrentUserID(user.ID);
       setLandLord({
         ID: data.ID,
-        firstname: data.firstname,
+        firstname: data.firstname.split(" ")[0],
         lastname: data.lastname,
         email: data.email,
         phonenumber: data.phonenumber,
@@ -64,8 +60,8 @@ const HouseDetails = ({navigation, route}) => {
         <SharedElement id={`item.${item}.photo`}>
           <Image
             // source={{uri: details?.images[0]}}
-            
-            source={require("../../assets/images/image.jpg")}
+
+            source={require('../../assets/images/image.jpg')}
             resizeMode="cover"
             style={{
               width: '100%',
@@ -114,7 +110,7 @@ const HouseDetails = ({navigation, route}) => {
             <Text style={Styles.text(Colors.black, 1.8, true)}>
               {details.house_type}
             </Text>
-            {currentUserID !== landLord?.ID && (
+            {landLord?.ID && (
               <Text
                 style={{
                   ...Styles.text('blue', 1.8, true),
@@ -191,8 +187,8 @@ const HouseDetails = ({navigation, route}) => {
               <View style={styles.galleryContainer}>
                 <Image
                   // source={{uri: item}}
-                  
-            source={require("../../assets/images/image.jpg")}
+
+                  source={require('../../assets/images/image.jpg')}
                   style={{
                     width: '100%',
                     height: '100%',

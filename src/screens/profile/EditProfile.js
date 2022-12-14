@@ -12,12 +12,12 @@ import {fetchUser} from '../../redux/actions';
 
 const EditProfile = ({navigation}) => {
   const dispatch = useDispatch();
-  const {user} = useSelector(state => state.appSlice);
+  const {users, user} = useSelector(state => state.appSlice);
   const [loading, setLoading] = useState(false);
   const [userProfile, setUserProfile] = useState({
-    firstName: user?.firstname,
-    lastName: user?.lastname,
-    phone: user?.phonenumber,
+    firstName: users?.firstname.split(" ")[0],
+    lastName: users?.lastname,
+    phone: users?.phonenumber,
   });
   const [error, setError] = useState({
     firstname: '',
@@ -58,9 +58,9 @@ const EditProfile = ({navigation}) => {
       setLoading(true);
       const token = await getSession();
       await axios.put(
-        `${api.url}${api.get.user}/${user.ID}`,
+        `${api.url}${api.get.user}/${users.ID}`,
         {
-          firstname: userProfile.firstName.trimEnd(),
+          firstname: `${userProfile.firstName.trimEnd()} ${user}`,
           lastname: userProfile.lastName.trimEnd(),
           phonenumber: userProfile.phone.trimEnd(),
         },
@@ -78,7 +78,6 @@ const EditProfile = ({navigation}) => {
       navigation.goBack()
     } catch (error) {
       setLoading(false);
-      console.log(error);
       if (error.response.data.message !== undefined) {
         snackHandler(`${error.response.data.message}`, 'error');
       } else {

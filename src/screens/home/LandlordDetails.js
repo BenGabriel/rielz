@@ -3,8 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  TouchableOpacity,
   FlatList,
   Linking,
 } from 'react-native';
@@ -18,7 +16,6 @@ import axios from 'axios';
 const LandlordDetails = ({route}) => {
   const {landLord} = route.params;
   const [landLordHouses, setLandLordHouses] = useState([]);
-  const data = [...Array(12 - 1 + 1).keys()];
 
   const getLandlordHouse = async () => {
     try {

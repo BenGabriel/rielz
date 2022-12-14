@@ -3,20 +3,6 @@ import {getSession, getUser} from '../helper/Index';
 import axios from 'axios';
 import api from '../helper/endpoint.json';
 
-export const fetchAllUser = createAsyncThunk('fetchAllUsers', async () => {
-  const token = await getSession();
-  const res = await axios.get(`${api.url}${api.get.user}`, {
-    headers: {
-      Authorization: `${token}`,
-    },
-  });
-  if (res.status === 200) {
-    return res.data;
-  } else {
-    console.log(res.data, 'error');
-  }
-});
-
 //get singleUser
 export const fetchUser = createAsyncThunk('fetchUser', async () => {
   const user = await getUser();
@@ -29,7 +15,7 @@ export const fetchUser = createAsyncThunk('fetchUser', async () => {
   if (res.status === 200) {
     return res.data;
   } else {
-    console.log(res.data, 'error');
+    console.log(res, 'error');
   }
 });
 

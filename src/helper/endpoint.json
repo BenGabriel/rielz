@@ -1,5 +1,5 @@
 {
-  "url": "https://rielzapp.herokuapp.com/",
+  "url": "https://rielzapp-api.onrender.com/",
   "authenticate": {
     "login": "login",
     "signup": "register"

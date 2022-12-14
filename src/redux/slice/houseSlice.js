@@ -1,8 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {
-  fetchAllHouses,
-  fetchLandlordHouses,
-} from '../actions';
+import {fetchAllHouses, fetchLandlordHouses} from '../actions';
 
 const initialState = {
   houses: [],
@@ -21,13 +18,18 @@ export const houseSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchAllHouses.fulfilled, (state, action) => {
-        (state.loading = false), (state.houses = action.payload);
+        state.loading = false;
+        state.houses = action.payload;
       })
       .addCase(fetchLandlordHouses.pending, state => {
         state.loading = true;
       })
       .addCase(fetchLandlordHouses.fulfilled, (state, action) => {
-        (state.loading = false), (state.landlordHouses = action.payload);
+        state.loading = false;
+        state.landlordHouses = action.payload;
+      })
+      .addCase(fetchLandlordHouses.rejected, state => {
+        state.loading = false;
       });
   },
 });

@@ -22,15 +22,26 @@ import Input from '../../components/Input';
 import Typography from '../../components/Typography';
 import axios from 'axios';
 import api from '../../helper/endpoint.json';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {useDispatch} from 'react-redux';
+import {saveUser} from '../../redux/slice/slice';
 
 const Register = ({navigation}) => {
+  const dispatch = useDispatch();
   const [registerDetails, setRegisterDetails] = useState({});
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'User', value: 'User'},
+    {label: 'Landlord', value: 'Landlord'},
+  ]);
   const [error, setError] = useState({
     firstname: '',
     lastname: '',
     email: '',
     phonenumber: '',
     password: '',
+    userType: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -39,14 +50,19 @@ const Register = ({navigation}) => {
   };
 
   const onChange = ({name, text}) => {
+    clearError();
+    setRegisterDetails({...registerDetails, [name]: text});
+  };
+
+  const clearError = () => {
     setError({
       firstname: '',
       lastname: '',
       email: '',
       phonenumber: '',
       password: '',
+      userType: '',
     });
-    setRegisterDetails({...registerDetails, [name]: text});
   };
 
   const handleRegister = () => {
@@ -61,6 +77,8 @@ const Register = ({navigation}) => {
       registerDetails.phonenumber.length < 11
     )
       return setError({...error, phonenumber: 'Enter a valid Phone Number'});
+    if (value === null)
+      return setError({...error, userType: 'Select a user type'});
     if (
       registerDetails.password === undefined ||
       registerDetails.password.length < 7
@@ -75,14 +93,13 @@ const Register = ({navigation}) => {
 
   const registerUser = async () => {
     setLoading(true);
-    console.log(api.url, api.authenticate.signup);
     try {
       await axios.post(
         `${api.url}${api.authenticate.signup}`,
         {
           email: registerDetails.email.trimEnd(),
           lastname: registerDetails.lastname.trimEnd(),
-          firstname: registerDetails.firstname.trimEnd(),
+          firstname: `${registerDetails.firstname.trimEnd().split(' ')[0]} ${value}`,
           phonenumber: registerDetails.phonenumber.trimEnd(),
           password: registerDetails.password.trimEnd(),
         },
@@ -93,6 +110,7 @@ const Register = ({navigation}) => {
         },
       );
       setLoading(false);
+      dispatch(saveUser(value));
       navigation.replace('Login');
     } catch (error) {
       setLoading(false);
@@ -139,31 +157,54 @@ const Register = ({navigation}) => {
           <Input
             placeholder="First Name"
             onChangeText={text => onChange({name: 'firstname', text})}
-            rounded
             error={error.firstname}
           />
           <Input
             placeholder="Last Name"
             onChangeText={text => onChange({name: 'lastname', text})}
-            rounded
             error={error.lastname}
           />
           <Input
             placeholder="Email"
             onChangeText={text => onChange({name: 'email', text})}
-            rounded
             error={error.email}
           />
           <Input
             placeholder="Phone Number"
             onChangeText={text => onChange({name: 'phonenumber', text})}
-            rounded
             error={error.phonenumber}
+            maxLength={11}
           />
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={value => {
+              setOpen(value), clearError();
+            }}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder="Select user type"
+            style={[
+              styles.dropdown,
+              {
+                borderColor: error.userType ? 'red' : Colors.grey,
+              },
+            ]}
+          />
+          {error.userType && (
+            <Text
+              style={{
+                ...Styles.text('red', 1.3, false),
+                marginVertical: 5,
+                alignSelf: 'flex-start',
+              }}>
+              {error.userType}
+            </Text>
+          )}
           <Input
             placeholder="Password"
             onChangeText={text => onChange({name: 'password', text})}
-            rounded
             error={error.password}
             secure
           />
@@ -208,5 +249,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingLeft: height(2),
     height: 46,
+  },
+  dropdown: {
+    borderWidth: 1,
+    borderRadius: 10,
   },
 });

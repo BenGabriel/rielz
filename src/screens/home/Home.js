@@ -6,19 +6,16 @@ import Typography from '../../components/Typography';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchAllHouses,
-  fetchLandlordHouses,
   fetchUser,
 } from '../../redux/actions';
 
 const Home = () => {
   const dispatch = useDispatch();
   const state = useSelector(state => state.houseSlice);
-  const data = [...Array(12 - 1 + 1).keys()];
 
   const loadAll = () => {
     dispatch(fetchUser());
     dispatch(fetchAllHouses());
-    dispatch(fetchLandlordHouses());
   };
 
   useEffect(() => {

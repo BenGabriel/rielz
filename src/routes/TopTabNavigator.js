@@ -6,10 +6,8 @@ import Search from '../screens/search/Search';
 import {Ionicons, AntDesign} from '../common/Icons';
 import {Colors} from '../helper/Index';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import Profile from '../screens/LandLord/Profile';
-import EditProfile from '../screens/LandLord/EditProfile';
-import UserHome from '../screens/LandLord/UserHome';
-import Add from '../screens/LandLord/Add';
+import Profile from '../screens/profile/Profile';
+import EditProfile from '../screens/profile/EditProfile';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createSharedElementStackNavigator();
@@ -49,9 +47,6 @@ const ProfileStackScreen = () => {
   return (
     <ProfileStack.Navigator screenOptions={{headerShown: false}}>
       <ProfileStack.Screen name="UserProfile" component={Profile} />
-      <ProfileStack.Screen name="OwnerDashboard" component={UserHome} />
-      <ProfileStack.Screen name="EditProfile" component={EditProfile} />
-      <ProfileStack.Screen name="AddHouse" component={Add} />
     </ProfileStack.Navigator>
   );
 };

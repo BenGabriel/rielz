@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -22,19 +22,32 @@ import Input from '../../components/Input';
 import Typography from '../../components/Typography';
 import axios from 'axios';
 import api from '../../helper/endpoint.json';
-import {useDispatch} from 'react-redux';
-import {
-  fetchAllHouses,
-} from '../../redux/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchAllHouses, fetchLandlordHouses} from '../../redux/actions';
+import {saveUser} from '../../redux/slice/slice';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
+  const {user, users} = useSelector(state => state.appSlice);
+
   const [loginDetails, setLoginDetails] = useState({});
   const [errors, setErrors] = useState({
     email: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (users !== null) {
+      if (user === 'Landlord') {
+        dispatch(fetchLandlordHouses());
+        navigation.replace('Landlord');
+      } else {
+        dispatch(fetchAllHouses());
+        navigation.replace('Stack');
+      }
+    }
+  }, []);
 
   const navigateToRegister = () => {
     navigation.navigate('Register');
@@ -70,13 +83,17 @@ const Login = ({navigation}) => {
       );
 
       setSession(data.token);
-      setUser(JSON.stringify(data.user))
+      setUser(JSON.stringify(data.user));
       setLoading(false);
-      dispatch(fetchAllHouses());
-      navigation.replace('Stack');
+
+      dispatch(saveUser(data.user.firstname.split(' ')[1]));
+
+      data.user.firstname.split(' ')[1] === 'User'
+        ? (dispatch(fetchAllHouses()), navigation.replace('Stack'))
+        : (dispatch(fetchLandlordHouses()), navigation.replace('Landlord'));
     } catch (error) {
       setLoading(false);
-      // console.log(error.response);
+      console.log(error);
       if (error.response.data.message !== undefined) {
         snackHandler(`${error.response.data.message}`, 'error');
       } else {
@@ -89,59 +106,59 @@ const Login = ({navigation}) => {
     <ScrollView
       style={{flex: 1, width: width(100)}}
       showsVerticalScrollIndicator={false}>
-      <ImageBackground
-        source={require('../../assets/images/authbackground.png')}
-        style={{
-          width: width(100),
-          height: height(100),
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Image
-          source={require('../../assets/images/logo1.png')}
-          style={{width: 200, height: 200, marginBottom: height(-3)}}
-        />
-        <Typography text="Welcome" size={3} />
-        <Typography
-          text="Sign In"
-          size={2}
-          style={{marginVertical: height(1)}}
-        />
-
-        <View
-          style={{width: '80%', marginTop: height(3), alignItems: 'center'}}>
-          <Input
-            placeholder="Email"
-            onChangeText={value => onChange({name: 'email', value})}
-            rounded
-            error={errors.email}
-          />
-          <Input
-            placeholder="Password"
-            onChangeText={value => onChange({name: 'password', value})}
-            rounded
-            error={errors.password}
-            secure
-          />
-        </View>
-        <Button
-          style={{marginTop: height(5)}}
-          onPress={handleLogin}
-          load={loading}
-          disabled={loading}>
-          Login
-        </Button>
-        <Text
+      {users !== null ? null : (
+        <ImageBackground
+          source={require('../../assets/images/authbackground.png')}
           style={{
-            ...Styles.text(Colors.grey, 1.7, false),
-            marginTop: height(1),
+            width: width(100),
+            height: height(100),
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
-          Don’t have an account?{' '}
-          <Text style={{color: Colors.primary}} onPress={navigateToRegister}>
-            Sign up
+          <Image
+            source={require('../../assets/images/logo1.png')}
+            style={{width: 200, height: 200, marginBottom: height(-3)}}
+          />
+          <Typography text="Welcome" size={3} />
+          <Typography
+            text="Sign In"
+            size={2}
+            style={{marginVertical: height(1)}}
+          />
+
+          <View
+            style={{width: '80%', marginTop: height(3), alignItems: 'center'}}>
+            <Input
+              placeholder="Email"
+              onChangeText={value => onChange({name: 'email', value})}
+              error={errors.email}
+            />
+            <Input
+              placeholder="Password"
+              onChangeText={value => onChange({name: 'password', value})}
+              error={errors.password}
+              secure
+            />
+          </View>
+          <Button
+            style={{marginTop: height(5)}}
+            onPress={handleLogin}
+            load={loading}
+            disabled={loading}>
+            Login
+          </Button>
+          <Text
+            style={{
+              ...Styles.text(Colors.grey, 1.7, false),
+              marginTop: height(1),
+            }}>
+            Don’t have an account?{' '}
+            <Text style={{color: Colors.primary}} onPress={navigateToRegister}>
+              Sign up
+            </Text>
           </Text>
-        </Text>
-      </ImageBackground>
+        </ImageBackground>
+      )}
     </ScrollView>
   );
 };

@@ -6,9 +6,10 @@ import Geolocation from 'react-native-geolocation-service';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {Provider} from 'react-redux';
-import {store} from './src/redux/store';
+import store, {persistor} from './src/redux/store';
+import {PersistGate} from 'redux-persist/integration/react';
+import LandlordNavigator from './src/routes/LandlordNavigator';
 // import {enableLatestRenderer} from 'react-native-maps';
-
 
 const Stack = createSharedElementStackNavigator();
 
@@ -45,16 +46,19 @@ const App = () => {
   }
   return (
     <Provider store={store}>
-      <NavigationContainer theme={appTheme}>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name="Details" component={StackNavigator} />
-          <Stack.Screen name="Stack" component={TopTabNavigator} />
-        </Stack.Navigator>
-      </NavigationContainer>
-      {/* AIzaSyBe0id34NY__yLzir1MCkz0t-kWmj3GHEo */}
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer theme={appTheme}>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name="Details" component={StackNavigator} />
+            <Stack.Screen name="Stack" component={TopTabNavigator} />
+            <Stack.Screen name="Landlord" component={LandlordNavigator} />
+          </Stack.Navigator>
+        </NavigationContainer>
+        {/* AIzaSyBe0id34NY__yLzir1MCkz0t-kWmj3GHEo */}
+      </PersistGate>
     </Provider>
   );
 };
