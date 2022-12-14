@@ -1,14 +1,20 @@
 import React, {useState} from 'react';
-import {Image, Pressable, StyleSheet, View} from 'react-native';
-import {Ionicons} from '../../common/Icons';
-import {Colors, getSession, height, snackHandler, width} from '../../helper/Index';
+import {Image, Pressable, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Ionicons, MaterialCommunityIcons} from '../../common/Icons';
+import {
+  Colors,
+  getSession,
+  height,
+  snackHandler,
+  width,
+} from '../../helper/Index';
 import Typography from '../../components/Typography';
 import {useDispatch, useSelector} from 'react-redux';
 import Button from '../../components/Button';
-import {saveUser} from '../../redux/slice/slice';
+import {logout, saveUser} from '../../redux/slice/slice';
 import api from '../../helper/endpoint.json';
 import axios from 'axios';
-import { fetchUser } from '../../redux/actions';
+import {fetchUser} from '../../redux/actions';
 
 const Profile = ({navigation}) => {
   const {users} = useSelector(state => state.appSlice);
@@ -22,7 +28,7 @@ const Profile = ({navigation}) => {
       await axios.put(
         `${api.url}${api.get.user}/${users.ID}`,
         {
-          firstname: `${users.firstname.split(" ")[0]} Landlord`,
+          firstname: `${users.firstname.split(' ')[0]} Landlord`,
         },
         {
           headers: {
@@ -45,6 +51,11 @@ const Profile = ({navigation}) => {
         snackHandler('Error becoming a landlord', 'error');
       }
     }
+  };
+
+  const logUserOut = () => {
+    dispatch(logout());
+    navigation.replace('Details');
   };
 
   return (
@@ -81,7 +92,7 @@ const Profile = ({navigation}) => {
           <Typography
             color={Colors.black}
             size={2}
-            text={`${users.firstname.split(' ')[0]} ${users.lastname}`}
+            text={`${users?.firstname?.split(' ')[0]} ${users?.lastname}`}
           />
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -95,7 +106,7 @@ const Profile = ({navigation}) => {
               style={styles.contentText}
             />
           </View>
-          <Typography color={Colors.black} size={2} text={users.email} />
+          <Typography color={Colors.black} size={2} text={users?.email} />
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.content}>
@@ -108,7 +119,7 @@ const Profile = ({navigation}) => {
               style={styles.contentText}
             />
           </View>
-          <Typography color={Colors.black} size={2} text={users.phonenumber} />
+          <Typography color={Colors.black} size={2} text={users?.phonenumber} />
         </View>
         <Button
           children="Become a landlord"
@@ -118,6 +129,26 @@ const Profile = ({navigation}) => {
           onPress={becomeLandlord}
           load={loading}
         />
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: height(6),
+          }}
+          onPress={logUserOut}>
+          <MaterialCommunityIcons
+            name="logout"
+            size={width(6)}
+            color={Colors.black}
+          />
+          <Typography
+            color={Colors.black}
+            size={1.8}
+            text="Logout"
+            bold
+            style={styles.contentText}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );

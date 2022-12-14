@@ -12,6 +12,7 @@ import {Ionicons, MaterialCommunityIcons} from '../../common/Icons';
 import Typography from '../../components/Typography';
 import Styles from '../../helper/Styles';
 import {logout} from '../../redux/slice/slice';
+import Button from '../../components/Button';
 
 const LandlordProfile = ({navigation}) => {
   const {users} = useSelector(state => state.appSlice);
@@ -21,6 +22,10 @@ const LandlordProfile = ({navigation}) => {
     dispatch(logout());
     navigation.replace('Details');
   };
+
+  const addHouse = () => {
+    navigation.navigate("AddHouse")
+  }
   return (
     <View style={styles.container}>
       <View style={Styles.flexRowSpaceCenter}>
@@ -92,6 +97,13 @@ const LandlordProfile = ({navigation}) => {
           </View>
           <Typography color={Colors.black} size={2} text={users?.phonenumber} />
         </View>
+        <Button
+          children="Add House"
+          style={{
+            marginTop: height(3),
+          }}
+          onPress={addHouse}
+        />
         <TouchableOpacity
           style={{
             flexDirection: 'row',
